@@ -26,7 +26,7 @@ public class MoneyTest {
   public void testToString() {
     System.out.println("toString");
     long cents = 1000;
-    Money instance = new Money(1000);
+    Money instance = new Money(10);
     String expResult = "edu.du.ict4305.parkingsystem.Money[cents=" + cents + "]";
 
     String result = instance.toString();

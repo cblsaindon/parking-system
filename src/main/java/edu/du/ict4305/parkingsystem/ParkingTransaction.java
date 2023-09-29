@@ -8,20 +8,20 @@ import java.time.Instant;
 import java.util.Objects;
 
 /**
- * ParkingCharge holds info about a parking charge incurred by a vehicle
+ * ParkingTransaction holds info about a parking charge incurred by a vehicle
  *
  * @author candace.saindon
  */
-public class ParkingCharge<T extends Money> {
+public class ParkingTransaction<T extends Money> {
 
   private Permit permit;
-  private String lotId;
+  private ParkingLot parkingLot;
   private Instant incurred;
   private T amount;
 
-  public ParkingCharge(Permit permit, String lotId, Instant incurred, T amount) {
+  public ParkingTransaction(Instant incurred, Permit permit, ParkingLot parkingLot, T amount) {
     this.permit = permit;
-    this.lotId = lotId;
+    this.parkingLot = parkingLot;
     this.incurred = incurred;
     this.amount = amount;
   }
@@ -34,6 +34,8 @@ public class ParkingCharge<T extends Money> {
     return permit;
   }
   
+
+  
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -42,20 +44,20 @@ public class ParkingCharge<T extends Money> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ParkingCharge<?> that = (ParkingCharge<?>) o;
+    ParkingTransaction<?> that = (ParkingTransaction<?>) o;
     return Objects.equals(permit, that.permit)
-        && Objects.equals(lotId, that.lotId)
+        && Objects.equals(parkingLot, that.parkingLot)
         && Objects.equals(incurred, that.incurred)
         && Objects.equals(amount, that.amount);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(permit, lotId, incurred, amount);
+    return Objects.hash(permit, parkingLot, incurred, amount);
   }
 
   public String toString() {
-    return getClass().getName() + "[permit=" + permit + ", lotId=" + lotId
+    return getClass().getName() + "[permit=" + permit + ", parkinglot=" + parkingLot
         + ",incurred=" + incurred + ", amount=" + amount + "]";
   }
 }

@@ -27,7 +27,7 @@ public class PermitManagerTest {
       permitManager = new PermitManager();
       address = new Address("1 Main St", "", "Denver", "CO", "80202");
       customer = new Customer("Jane", "Doe", address, "303-555-5555");
-      car = new Car("ABC123", CarType.COMPACT, customer);
+      car = new Car("ABC123", CARTYPE.COMPACT, customer);
     }
 
     @Test

@@ -18,7 +18,7 @@ import java.util.Objects;
 public class Car {
 
   private String licensePlate;
-  private CarType type;
+  private CARTYPE type;
   private Customer customer;
   private Instant lotEnter;
 
@@ -31,7 +31,7 @@ public class Car {
    * @param customer the owner of the car
    * @throws IllegalArgumentException if the license plate, car type, or owner is null or empty
    */
-  public Car(String licensePlate, CarType type, Customer customer) {
+  public Car(String licensePlate, CARTYPE type, Customer customer) {
     try {
       if (licensePlate == null || licensePlate.isEmpty()) {
         throw new IllegalArgumentException("The license must not be null or empty");
@@ -79,7 +79,7 @@ public class Car {
     return hoursInLot;
   }
 
-  public CarType getCarType() {
+  public CARTYPE getCarType() {
     return type;
   }
 
@@ -105,7 +105,7 @@ public class Car {
 
 
 
-  public void setCarType(CarType type) {
+  public void setCarType(CARTYPE type) {
     
     try {
       if (type == null) {

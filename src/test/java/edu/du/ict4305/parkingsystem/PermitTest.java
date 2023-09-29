@@ -25,7 +25,7 @@ public class PermitTest {
     public void setUp() {
       address = new Address("1 Main St", "", "Denver", "CO", "80202");
       customer = new Customer("Jane", "Doe", address, "303-555-5555");
-      car = new Car("ABC123", CarType.COMPACT, customer);
+      car = new Car("ABC123", CARTYPE.COMPACT, customer);
       expiration = LocalDateTime.now().plus(1, ChronoUnit.DAYS); // Expire in 1 day
     }
 
@@ -49,7 +49,7 @@ public class PermitTest {
     public void testSetCar() {
       Permit permit = new Permit("P789", car, expiration);
 
-      Car newCar = new Car("XYZ789", CarType.SUV, new Customer("Jane", "Smith", new Address("456 Avenue", "", "Town", "State", "67890"), "987-654-3210"));
+      Car newCar = new Car("XYZ789", CARTYPE.SUV, new Customer("Jane", "Smith", new Address("456 Avenue", "", "Town", "State", "67890"), "987-654-3210"));
       permit.setCar(newCar);
 
       assertEquals(newCar, permit.getCar());
