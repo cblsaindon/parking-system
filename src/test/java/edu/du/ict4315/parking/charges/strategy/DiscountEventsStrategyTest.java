@@ -5,11 +5,11 @@
 package edu.du.ict4315.parking.charges.strategy;
 
 import edu.du.ict4305.parkingsystem.Address;
-import edu.du.ict4305.parkingsystem.CARTYPE;
+import edu.du.ict4305.parkingsystem.CarType;
 import edu.du.ict4305.parkingsystem.Car;
 import edu.du.ict4305.parkingsystem.Customer;
 import edu.du.ict4305.parkingsystem.Money;
-import edu.du.ict4305.parkingsystem.PARKINGLOTTYPE;
+import edu.du.ict4305.parkingsystem.ParkingLotType;
 import edu.du.ict4305.parkingsystem.ParkingLot;
 import edu.du.ict4305.parkingsystem.Permit;
 import edu.du.ict4305.parkingsystem.PermitManager;
@@ -44,9 +44,9 @@ public class DiscountEventsStrategyTest {
     public void setUp() {
         strategy = new DiscountEventsStrategy();
         address = new Address("123 Main St", "Apt 1", "Denver", "CO", "80202");
-        parkingLot = new ParkingLot("Sample Lot", address, 100, PARKINGLOTTYPE.ENTRY);
+        parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
         customer = new Customer("Jane", "Doe", address, "303-555-5555");
-        car = new Car("123", CARTYPE.COMPACT, customer);
+        car = new Car("123", CarType.COMPACT, customer);
         permit = permitManager.register(car);
     }
 

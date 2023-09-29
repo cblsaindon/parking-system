@@ -29,9 +29,9 @@ public class ParkingLotTest {
         address = new Address("1 Main St", "", "Denver", "CO", "80202");
         customer = new Customer("Jane", "Doe", address, "303-555-5555");
         String license = "123";
-        CARTYPE type = CARTYPE.SUV;
+        CarType type = CarType.SUV;
         car = new Car(license, type, customer);
-        parkingLot = new ParkingLot("Sample Lot", address, 100, PARKINGLOTTYPE.ENTRY);
+        parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
         mockChargeStrategy = new MockParkingChargeStrategy();
     }
 
@@ -45,7 +45,7 @@ public class ParkingLotTest {
         //Address address = new Address("123 Main St", "Apt 2", "Denver", "80241", "Colorado");
         int capacity = 100;
 
-        ParkingLot instance = new ParkingLot(lotId, address, capacity, PARKINGLOTTYPE.ENTRY);
+        ParkingLot instance = new ParkingLot(lotId, address, capacity, ParkingLotType.ENTRY);
         String expResult = lotId;
         String result = instance.getLotId();
         assertEquals(expResult, result);
@@ -62,7 +62,7 @@ public class ParkingLotTest {
         int capacity = 100;
         //Address address = new Address("123 Main St", "Apt 2", "Denver", "80241", "Colorado");
 
-        ParkingLot instance = new ParkingLot(lotId, address, capacity, PARKINGLOTTYPE.ENTRY);
+        ParkingLot instance = new ParkingLot(lotId, address, capacity, ParkingLotType.ENTRY);
         Address expResult = address;
         Address result = instance.getAddress();
         assertEquals(expResult, result);
@@ -80,7 +80,7 @@ public class ParkingLotTest {
 
         int capacity = 100;
 
-        ParkingLot instance = new ParkingLot(lotId, address, capacity, PARKINGLOTTYPE.ENTRY);
+        ParkingLot instance = new ParkingLot(lotId, address, capacity, ParkingLotType.ENTRY);
         int expResult = capacity;
         int result = instance.getCapacity();
         assertEquals(expResult, result);
@@ -97,7 +97,7 @@ public class ParkingLotTest {
         //Address address = new Address("123 Main St", "Apt 2", "Denver", "80241", "Colorado");
         int capacity = 100;
 
-        ParkingLot instance = new ParkingLot(lotId, address, capacity, PARKINGLOTTYPE.ENTRY);
+        ParkingLot instance = new ParkingLot(lotId, address, capacity, ParkingLotType.ENTRY);
         int expResult = 0;
         int result = instance.getCarsInLot();
         assertEquals(expResult, result);
@@ -114,7 +114,7 @@ public class ParkingLotTest {
         //Address address = new Address("123 Main St", "Apt 2", "Denver", "80241", "Colorado");
         int capacity = 100;
 
-        ParkingLot instance = new ParkingLot(lotId, address, capacity, PARKINGLOTTYPE.ENTRY);
+        ParkingLot instance = new ParkingLot(lotId, address, capacity, ParkingLotType.ENTRY);
         int expResult = capacity;
         int result = instance.getEmptySlots();
         assertEquals(expResult, result);
@@ -126,7 +126,7 @@ public class ParkingLotTest {
         String lotId = "Lot1";
         //Address address = new Address("123 Main St", "Apt 2", "Denver", "80241", "Colorado");
         int capacity = 10;
-        PARKINGLOTTYPE lotType = PARKINGLOTTYPE.ENTRY;
+        ParkingLotType lotType = ParkingLotType.ENTRY;
         ParkingLot lot = new ParkingLot(lotId, address, capacity, lotType);
 
         lot.entry(car);
@@ -141,7 +141,7 @@ public class ParkingLotTest {
         String lotId = "Lot1";
         //Address address = new Address("123 Main St", "Apt 2", "Denver", "80241", "Colorado");
         int capacity = 10;
-        PARKINGLOTTYPE lotType = PARKINGLOTTYPE.ENTRY;
+        ParkingLotType lotType = ParkingLotType.ENTRY;
         ParkingLot lot = new ParkingLot(lotId, address, capacity, lotType);
 
         Car car = null;
@@ -152,21 +152,21 @@ public class ParkingLotTest {
     @Test
     public void testEntry_nullCar() {
         ParkingLot lot = new ParkingLot("A", address,
-                20, PARKINGLOTTYPE.ENTRY);
+                20, ParkingLotType.ENTRY);
         assertThrows(IllegalArgumentException.class, () -> lot.entry(null));
     }
 
     @Test
     public void testEntry_ParkingLotFull() {
         ParkingLot lot = new ParkingLot("A", address,
-                0, PARKINGLOTTYPE.ENTRY);
-        //Car car = new Car("123", CARTYPE.SUV, owner);
+                0, ParkingLotType.ENTRY);
+        //Car car = new Car("123", CarType.SUV, owner);
         assertThrows(IllegalStateException.class, () -> lot.entry(car));
     }
 
     @Test
     public void testExit_NullCar() {
-        ParkingLot parkingLot = new ParkingLot("LOT1", address, 100, PARKINGLOTTYPE.ENTRY);
+        ParkingLot parkingLot = new ParkingLot("LOT1", address, 100, ParkingLotType.ENTRY);
         assertThrows(IllegalArgumentException.class, () -> {
             parkingLot.exit(null);
         });
@@ -175,9 +175,9 @@ public class ParkingLotTest {
     @Test
     public void testExit_lotEmpty() {
         int capacity = 0;
-        ParkingLot lot = new ParkingLot("LOT1", address, capacity, PARKINGLOTTYPE.ENTRYEXIT);
+        ParkingLot lot = new ParkingLot("LOT1", address, capacity, ParkingLotType.ENTRYEXIT);
 
-        //Car car = new Car("license", CARTYPE.COMPACT, owner);
+        //Car car = new Car("license", CarType.COMPACT, owner);
         //car.setPermit("permit123");
         assertThrows(IllegalStateException.class, () -> lot.exit(car));
     }
@@ -228,7 +228,7 @@ public class ParkingLotTest {
         int capacity = 100;
         int carsInLot = 0;
 
-        ParkingLot instance = new ParkingLot(lotId, address, capacity, PARKINGLOTTYPE.ENTRY);
+        ParkingLot instance = new ParkingLot(lotId, address, capacity, ParkingLotType.ENTRY);
         String expResult = "edu.du.ict4305.parkingsystem.ParkingLot" + "[lotId=" + lotId + ", address=" + address
                 + ",capacity=" + capacity + ", carsInLot=" + carsInLot + "]";
         String result = instance.toString();

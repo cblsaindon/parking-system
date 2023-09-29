@@ -19,7 +19,7 @@ public class TransactionManagerTest {
     private PermitManager permitManager;
     Address address;
     Customer customer;
-    CARTYPE type;
+    CarType type;
     String license;
     Car car;
     Permit permit;
@@ -31,11 +31,11 @@ public class TransactionManagerTest {
         address = new Address("123 Main St", "Apt 1", "Denver", "CO", "80202");
         customer = new Customer("Jane", "Doe", address, "303-555-5555");
         license = "123";
-        type = CARTYPE.SUV;
+        type = CarType.SUV;
         car = new Car(license, type, customer);
         permitManager = new PermitManager();
         permit = permitManager.register(car);
-        parkingLot = new ParkingLot("Sample Lot", address, 100, PARKINGLOTTYPE.ENTRY);
+        parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
         mockChargeStrategy = new MockParkingChargeStrategy();
         parkingLot.setParkingChargeStrategy(mockChargeStrategy);
     }

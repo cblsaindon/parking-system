@@ -14,20 +14,20 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ParkingLotTypeTest {
 
   /**
-   * Test if the ENTRY constant exists in the PARKINGLOTTYPE enum
+   * Test if the ENTRY constant exists in the ParkingLotType enum
    */
   @Test
   public void testEntryExists() {
-    PARKINGLOTTYPE entry = PARKINGLOTTYPE.ENTRY;
+    ParkingLotType entry = ParkingLotType.ENTRY;
     assertNotNull(entry);
   }
 
   /**
-   * Test if the ENTRYEXIT constant exists in the PARKINGLOTTYPE enum
+   * Test if the ENTRYEXIT constant exists in the ParkingLotType enum
    */
   @Test
   public void testEntryExitExists() {
-    PARKINGLOTTYPE entryExit = PARKINGLOTTYPE.ENTRYEXIT;
+    ParkingLotType entryExit = ParkingLotType.ENTRYEXIT;
     assertNotNull(entryExit);
   }
 

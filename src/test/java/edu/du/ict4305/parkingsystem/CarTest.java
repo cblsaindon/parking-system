@@ -30,7 +30,7 @@ public class CarTest {
     address = new Address("1 Main St", "", "Denver", "CO", "80202");
     customer = new Customer("Jane", "Doe", address, "303-555-5555");
     String license = "123";
-    CARTYPE type = CARTYPE.SUV;
+    CarType type = CarType.SUV;
     car = new Car(license, type, customer);
   }
 
@@ -65,8 +65,8 @@ public class CarTest {
   @Test
   public void testGetCarType() {
     System.out.println("getCarType");
-    CARTYPE expResult = CARTYPE.SUV;
-    CARTYPE result = car.getCarType();
+    CarType expResult = CarType.SUV;
+    CarType result = car.getCarType();
     assertEquals(expResult, result);
 
   }
@@ -82,7 +82,7 @@ public class CarTest {
   @Test
   public void testSetCarType() {
     System.out.println("setCarType");
-    CARTYPE carType = CARTYPE.COMPACT;
+    CarType carType = CarType.COMPACT;
     car.setCarType(carType);
 
   }
@@ -90,7 +90,7 @@ public class CarTest {
   @Test
   public void testNullLicense() {
     assertThrows(IllegalArgumentException.class,
-        () -> new Car(null, CARTYPE.SUV, new Customer("Jane",
+        () -> new Car(null, CarType.SUV, new Customer("Jane",
             "Doe", address, "303-555-5555"))
     );
   }
@@ -98,7 +98,7 @@ public class CarTest {
   @Test
   public void testEmptyLicense() {
     assertThrows(IllegalArgumentException.class,
-        () -> new Car("", CARTYPE.SUV, new Customer("Jane", "Doe", address, "303-555-5555"))
+        () -> new Car("", CarType.SUV, new Customer("Jane", "Doe", address, "303-555-5555"))
     );
   }
 
@@ -113,7 +113,7 @@ public class CarTest {
 
   @Test
   public void testNullLotEnter() {
-    Car car = new Car("123ABC", CARTYPE.SUV, new Customer("Jane",
+    Car car = new Car("123ABC", CarType.SUV, new Customer("Jane",
         "Doe", address, "303-555-5555"));
     assertThrows(IllegalArgumentException.class,
         () -> car.getHoursInLot(null)
@@ -128,7 +128,7 @@ public class CarTest {
     System.out.println("toString");
 
     String license = "123";
-    CARTYPE type = CARTYPE.SUV;
+    CarType type = CarType.SUV;
 
     String expResult = "edu.du.ict4305.parkingsystem.Car" + "[licensePlate=" + license + ",type=" + type + ",customer=" + customer + "]";
     String result = car.toString();

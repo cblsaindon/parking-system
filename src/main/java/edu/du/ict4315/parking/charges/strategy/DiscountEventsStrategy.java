@@ -6,8 +6,8 @@ package edu.du.ict4315.parking.charges.strategy;
 
 import edu.du.ict4305.parkingsystem.Car;
 import edu.du.ict4305.parkingsystem.Money;
-import edu.du.ict4305.parkingsystem.PARKINGLOTTYPE;
-import edu.du.ict4305.parkingsystem.CARTYPE;
+import edu.du.ict4305.parkingsystem.ParkingLotType;
+import edu.du.ict4305.parkingsystem.CarType;
 import edu.du.ict4305.parkingsystem.ParkingLot;
 import edu.du.ict4305.parkingsystem.Permit;
 import java.time.Instant;
@@ -26,8 +26,8 @@ public class DiscountEventsStrategy implements ParkingChargeStrategy {
     Permit permit;
     Car car;
     ParkingLot parkingLot;
-    PARKINGLOTTYPE parkingLotType;
-    CARTYPE carType;
+    ParkingLotType parkingLotType;
+    CarType carType;
     Money carTypeCharge;
     Money lineItemCharge;
     Money totalCharge;
@@ -69,7 +69,7 @@ public class DiscountEventsStrategy implements ParkingChargeStrategy {
 
     // Calculates the discounted rate for a given rate and car type.
     private double getDiscountedRate(Car car, Money rate) {
-        CARTYPE carType = car.getCarType();
+        CarType carType = car.getCarType();
         //Get the money value in dollars (double) to determine the percentage discount
         double dollarRate = rate.getDollars();
         double discountPercentage = carType.getDiscountPercentage();
@@ -115,9 +115,9 @@ public class DiscountEventsStrategy implements ParkingChargeStrategy {
 
         //1. find out what lot type it is based on the lotid
         ParkingLot lot = getLotTypeByLotId(lotId);
-        PARKINGLOTTYPE lotType = lot.getLotType();
+        ParkingLotType lotType = lot.getLotType();
 
-        if (lotType == PARKINGLOTTYPE.ENTRY) {
+        if (lotType == ParkingLotType.ENTRY) {
             Duration duration = Duration.between(lotEnterTime, lotExitTime);
             long daysInLot = duration.toHours();
             //2. calculate the charge
@@ -125,7 +125,7 @@ public class DiscountEventsStrategy implements ParkingChargeStrategy {
                 charge = calculateOvernightCharge(car, daysInLot);
             }
 
-        } else if (lotType == PARKINGLOTTYPE.ENTRYEXIT) {
+        } else if (lotType == ParkingLotType.ENTRYEXIT) {
             //charge based on hours
 
             Duration duration = Duration.between(lotEnterTime, lotExitTime);
@@ -136,9 +136,9 @@ public class DiscountEventsStrategy implements ParkingChargeStrategy {
 
         parkingLotType = parkingLot.getLotType();
 
-        if (parkingLotType == PARKINGLOTTYPE.ENTRY) {
+        if (parkingLotType == ParkingLotType.ENTRY) {
 
-        } else if (parkingLotType == PARKINGLOTTYPE.ENTRYEXIT) {
+        } else if (parkingLotType == ParkingLotType.ENTRYEXIT) {
 
         } else {
             throw new UnsupportedOperationException("Not supported yet.");

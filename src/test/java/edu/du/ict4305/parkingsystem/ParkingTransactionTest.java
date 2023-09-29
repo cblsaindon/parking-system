@@ -27,10 +27,10 @@ public class ParkingTransactionTest {
         Address address = new Address("1 Main St", "", "Denver", "CO", "80202");
         Customer customer = new Customer("Jane", "Doe", address, "303-555-5555");
         String license = "123";
-        CARTYPE type = CARTYPE.SUV;
+        CarType type = CarType.SUV;
         Car car = new Car(license, type, customer);
         Permit permit = permitManager.register(car);
-        parkingLot = new ParkingLot("Sample Lot", address, 100, PARKINGLOTTYPE.ENTRY);
+        parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
         Instant incurred = Instant.now();
         Money amount = new Money(10.0);
 

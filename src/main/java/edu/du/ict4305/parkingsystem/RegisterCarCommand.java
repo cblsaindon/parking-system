@@ -68,7 +68,7 @@ public class RegisterCarCommand implements Command {
     @Override
     public String execute(Properties params) {
            
-      CARTYPE carType = null;
+      CarType carType = null;
       
       //retrieve the parameter values based on the key
       String firstName = params.getProperty("first name");
@@ -83,9 +83,9 @@ public class RegisterCarCommand implements Command {
 
       //Determine car type based on user input     
       if (carTypeString.equals("compact")) {
-        carType = CARTYPE.COMPACT;
+        carType = CarType.COMPACT;
       } else if (carTypeString.equals("suv")) {
-        carType = CARTYPE.SUV;
+        carType = CarType.SUV;
       } else {
         throw new IllegalArgumentException("Invalid car type: " + carTypeString);
       }

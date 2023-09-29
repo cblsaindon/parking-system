@@ -70,7 +70,7 @@ public class ParkingOffice implements Office {
     }
 
     // Method to register a car with the Parking Office.
-    public Car register(Customer customer, String license, CARTYPE carType) {
+    public Car register(Customer customer, String license, CarType carType) {
 
         Car car = new Car(license, carType, customer);
 

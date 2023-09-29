@@ -18,28 +18,28 @@ public class CarTypeTest {
 
   @Test
   public void testCarType_compact() {
-    CARTYPE carType = CARTYPE.COMPACT;
+    CarType carType = CarType.COMPACT;
     assertEquals("COMPACT", carType.name());
-    assertEquals(CARTYPE.COMPACT, carType);
+    assertEquals(CarType.COMPACT, carType);
   }
 
   @Test
   public void testCarType_suv() {
-    CARTYPE carType = CARTYPE.SUV;
+    CarType carType = CarType.SUV;
     assertEquals("SUV", carType.name());
-    assertEquals(CARTYPE.SUV, carType);
+    assertEquals(CarType.SUV, carType);
   }
 
   @Test
   public void testCarType_valueOf() {
-    assertEquals(CARTYPE.COMPACT, CARTYPE.valueOf("COMPACT"));
-    assertEquals(CARTYPE.SUV, CARTYPE.valueOf("SUV"));
+    assertEquals(CarType.COMPACT, CarType.valueOf("COMPACT"));
+    assertEquals(CarType.SUV, CarType.valueOf("SUV"));
   }
 
   @Test
   public void testCarType_valueOf_invalid() {
     assertThrows(IllegalArgumentException.class, () -> {
-      CARTYPE.valueOf("invalidType");
+      CarType.valueOf("invalidType");
     });
   }
 

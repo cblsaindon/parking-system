@@ -27,7 +27,7 @@ public class ParkingOfficeTest {
     private List<ParkingTransaction> charges;
     Address address;
     Customer customer;
-    CARTYPE type;
+    CarType type;
     String license;
     Car car;
     Permit permit;
@@ -44,10 +44,10 @@ public class ParkingOfficeTest {
         address = new Address("123 Main St", "Apt 1", "Denver", "CO", "80202");
         customer = new Customer("Jane", "Doe", address, "303-555-5555");
         license = "123";
-        type = CARTYPE.SUV;
+        type = CarType.SUV;
         car = new Car(license, type, customer);
         permit = permitManager.register(car);
-        parkingLot = new ParkingLot("Sample Lot", address, 100, PARKINGLOTTYPE.ENTRY);
+        parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class ParkingOfficeTest {
         Customer customer = registerTestCustomer();
 
         String carLicense = "ABC123";
-        CARTYPE carType = CARTYPE.COMPACT;
+        CarType carType = CarType.COMPACT;
         Car car = parkingOffice.register(customer, carLicense, carType);
 
         assertNotNull(car);
@@ -142,7 +142,7 @@ public class ParkingOfficeTest {
         System.out.println("register");
         Customer customer = null;
         String license = "";
-        CARTYPE carType = null;
+        CarType carType = null;
         ParkingOffice instance = null;
         Car expResult = null;
         Car result = instance.register(customer, license, carType);

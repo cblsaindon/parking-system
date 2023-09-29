@@ -21,11 +21,11 @@ public class ParkingLot {
   private Address address;
   private int capacity;
   private int carsInLot;
-  private PARKINGLOTTYPE lotType;
+  private ParkingLotType lotType;
   private Money baseRate = new Money(5.00);
   private ParkingChargeStrategy parkingChargeStrategy;
 
-  public ParkingLot(String lotId, Address address, int capacity, PARKINGLOTTYPE lotType) {
+  public ParkingLot(String lotId, Address address, int capacity, ParkingLotType lotType) {
     if (lotId == null || lotId.isEmpty()) {
       throw new IllegalArgumentException("The lot id must not be null or empty");
     }
@@ -62,7 +62,7 @@ public class ParkingLot {
     return emptySlots;
   }
 
-  public PARKINGLOTTYPE getLotType() {
+  public ParkingLotType getLotType() {
     return lotType;
   }
   

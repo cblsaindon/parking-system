@@ -8,7 +8,7 @@ package edu.du.ict4305.parkingsystem;
  *
  * @author candace.saindon
  */
-enum CarType {
+public enum CarType {
   COMPACT(0.2),
   SUV(0);
 
