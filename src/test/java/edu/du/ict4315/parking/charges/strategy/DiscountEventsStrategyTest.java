@@ -39,41 +39,81 @@ public class DiscountEventsStrategyTest {
     private Address address;
     private Customer customer;
     private PermitManager permitManager;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
 
     @Before
     public void setUp() {
         strategy = new DiscountEventsStrategy();
-        address = new Address("123 Main St", "Apt 1", "Denver", "CO", "80202");
+        address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
         parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
-        customer = new Customer("Jane", "Doe", address, "303-555-5555");
-        car = new Car("123", CarType.COMPACT, customer);
-        permit = permitManager.register(car);
+        firstName = "Jane";
+        lastName = "Doe";
+        phoneNumber = "303-555-5555";
+        Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phoneNumber).build();
     }
 
     @Test
-    public void testNonEventDay() {
+    public void testNonEventCompactDay() {
         //car parked on a non-event day
+        car = new Car("123", CarType.COMPACT, customer);
+        permit = permitManager.register(car);
         Instant nonEventDate = Instant.parse("2023-09-02T10:00:00Z");
-        Money baseRate = new Money(10.0);
+        Money baseRate = Money.of(10.0);
 
         Money charge = strategy.calculateParkingCharge(nonEventDate, permit, baseRate);
         //Calculate the charge we expect manually
         double expectedCharge = (10.0 * (1 - car.getCarType().getDiscountPercentage())) + 10;
-        Money expectedMoney = new Money(expectedCharge);
+        Money expectedMoney = Money.of(expectedCharge);
 
         assertEquals(expectedMoney, charge);
     }
 
     @Test
-    public void testEventDay() {
+    public void testEventCompactDay() {
         //car is parked during an event
+        car = new Car("123", CarType.COMPACT, customer);
+        permit = permitManager.register(car);
         Instant nonEventDate = Instant.parse("2023-09-01T10:00:00Z");
-        Money baseRate = new Money(10.0);
+        Money baseRate = Money.of(10.0);
 
         Money charge = strategy.calculateParkingCharge(nonEventDate, permit, baseRate);
         //Calculate the charge we expect manually
         double expectedCharge = (10.0 * (1 - car.getCarType().getDiscountPercentage())) + 10;
-        Money expectedMoney = new Money(expectedCharge);
+        Money expectedMoney = Money.of(expectedCharge);
+
+        assertEquals(expectedMoney, charge);
+    }
+
+    @Test
+    public void testNonEventSUVDay() {
+        //car parked on a non-event day
+        car = new Car("123", CarType.SUV, customer);
+        permit = permitManager.register(car);
+        Instant nonEventDate = Instant.parse("2023-09-02T10:00:00Z");
+        Money baseRate = Money.of(10.0);
+
+        Money charge = strategy.calculateParkingCharge(nonEventDate, permit, baseRate);
+        //Calculate the charge we expect manually
+        double expectedCharge = (10.0 * (1 - car.getCarType().getDiscountPercentage())) + 10;
+        Money expectedMoney = Money.of(expectedCharge);
+
+        assertEquals(expectedMoney, charge);
+    }
+
+    @Test
+    public void testEventSUVDay() {
+        //car is parked during an event
+        car = new Car("123", CarType.SUV, customer);
+        permit = permitManager.register(car);
+        Instant nonEventDate = Instant.parse("2023-09-01T10:00:00Z");
+        Money baseRate = Money.of(10.0);
+
+        Money charge = strategy.calculateParkingCharge(nonEventDate, permit, baseRate);
+        //Calculate the charge we expect manually
+        double expectedCharge = (10.0 * (1 - car.getCarType().getDiscountPercentage())) + 10;
+        Money expectedMoney = Money.of(expectedCharge);
 
         assertEquals(expectedMoney, charge);
     }

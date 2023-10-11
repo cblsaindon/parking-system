@@ -21,13 +21,19 @@ public class PermitManagerTest {
     private Car car;
     private Address address;
     private Customer customer;
-    
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+
     @BeforeEach
     public void setUp() {
-      permitManager = new PermitManager();
-      address = new Address("1 Main St", "", "Denver", "CO", "80202");
-      customer = new Customer("Jane", "Doe", address, "303-555-5555");
-      car = new Car("ABC123", CarType.COMPACT, customer);
+        permitManager = new PermitManager();
+        address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
+        firstName = "Jane";
+        lastName = "Doe";
+        phoneNumber = "303-555-5555";
+        Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phoneNumber).build();
+        car = new Car("ABC123", CarType.COMPACT, customer);
     }
 
     @Test

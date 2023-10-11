@@ -54,9 +54,8 @@ public class ParkingOffice implements Office {
     public Customer register(String firstName, String lastName, String address1,
             String address2, String city,
             String state, String zipCode, String phone) {
-        Address address = new Address(address1, address2, city, state, zipCode);
-
-        Customer customer = new Customer(firstName, lastName, address, phone);
+        Address address = new Address.Builder(address1, city, state, zipCode).streetAddress2(address2).build();
+        Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phone).build();
 
         try {
             customerToIdMap.put(customer.getId(), customer);

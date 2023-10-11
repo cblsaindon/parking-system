@@ -20,46 +20,52 @@ public class PermitTest {
     private LocalDateTime expiration;
     private Address address;
     private Customer customer;
-    
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+
     @BeforeEach
     public void setUp() {
-      address = new Address("1 Main St", "", "Denver", "CO", "80202");
-      customer = new Customer("Jane", "Doe", address, "303-555-5555");
-      car = new Car("ABC123", CarType.COMPACT, customer);
-      expiration = LocalDateTime.now().plus(1, ChronoUnit.DAYS); // Expire in 1 day
+        address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
+        firstName = "Jane";
+        lastName = "Doe";
+        phoneNumber = "303-555-5555";
+        Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phoneNumber).build();
+        car = new Car("ABC123", CarType.COMPACT, customer);
+        expiration = LocalDateTime.now().plus(1, ChronoUnit.DAYS); // Expire in 1 day
     }
 
     @Test
     public void testConstructorAndGetters() {
-      Permit permit = new Permit("P123", car, expiration);
+        Permit permit = new Permit("P123", car, expiration);
 
-      assertEquals("P123", permit.getId());
-      assertEquals(car, permit.getCar());
-      assertFalse(permit.isExpired());
+        assertEquals("P123", permit.getId());
+        assertEquals(car, permit.getCar());
+        assertFalse(permit.isExpired());
     }
 
     @Test
     public void testExpiredPermit() {
-      LocalDateTime expiredDateTime = LocalDateTime.now().minus(1, ChronoUnit.DAYS); // Expired 1 day ago
-      Permit expiredPermit = new Permit("P456", car, expiredDateTime);
-      assertTrue(expiredPermit.isExpired());
+        LocalDateTime expiredDateTime = LocalDateTime.now().minus(1, ChronoUnit.DAYS); // Expired 1 day ago
+        Permit expiredPermit = new Permit("P456", car, expiredDateTime);
+        assertTrue(expiredPermit.isExpired());
     }
 
     @Test
     public void testSetCar() {
-      Permit permit = new Permit("P789", car, expiration);
+        Permit permit = new Permit("P789", car, expiration);
 
-      Car newCar = new Car("XYZ789", CarType.SUV, new Customer("Jane", "Smith", new Address("456 Avenue", "", "Town", "State", "67890"), "987-654-3210"));
-      permit.setCar(newCar);
+        Car newCar = new Car("XYZ789", CarType.SUV, customer);
+        permit.setCar(newCar);
 
-      assertEquals(newCar, permit.getCar());
+        assertEquals(newCar, permit.getCar());
     }
 
     @Test
     public void testToString() {
-      Permit permit = new Permit("P123", car, expiration);
-      String expectedToString = "edu.du.ict4305.parkingsystem.Permit[id=P123, permitExpiration=" + expiration + "]";
-      assertEquals(expectedToString, permit.toString());
+        Permit permit = new Permit("P123", car, expiration);
+        String expectedToString = "edu.du.ict4305.parkingsystem.Permit[id=P123, permitExpiration=" + expiration + "]";
+        assertEquals(expectedToString, permit.toString());
     }
 
 }

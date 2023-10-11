@@ -17,20 +17,20 @@ import java.time.ZonedDateTime;
  * @author candace.saindon
  */
 public class WeekendPrimeTimeStrategy implements ParkingChargeStrategy {
-    Money totalCharge;
-    Money lineItemCharge;
+    private Money totalCharge;
+    private Money lineItemCharge;
 
     //These money values should be stored in a database
-    Money weekendCharge = new Money(20);
-    Money weekdayCharge = new Money(10);
-    Money primeTimeCharge = new Money(40);
-    Money dayCharge = new Money(20);
+    private Money weekendCharge = Money.of(20);
+    private Money weekdayCharge = Money.of(10);
+    private Money primeTimeCharge = Money.of(40);
+    private Money dayCharge = Money.of(20);
     
     @Override
     public Money calculateParkingCharge(Instant date, Permit permit, Money baseRate) {
         //set the base rate
         if (totalCharge == null) {
-            totalCharge = new Money(0);
+            totalCharge = Money.of(0);
         } else {
             totalCharge = baseRate;
         }
@@ -68,7 +68,7 @@ public class WeekendPrimeTimeStrategy implements ParkingChargeStrategy {
         // Get the day of the week from the ZonedDateTime
         int hour = zonedDateTime.getHour();
 
-        isPrimeTime = hour > 6;
+        isPrimeTime = hour > 18;
 
         return isPrimeTime;
     }

@@ -4,6 +4,7 @@
  */
 package edu.du.ict4305.parkingsystem;
 
+import edu.du.ict4315.parking.charges.factory.ParkingChargeStrategyFactory;
 import edu.du.ict4315.parking.charges.strategy.ParkingChargeStrategy;
 import java.time.Instant;
 import org.junit.jupiter.api.Test;
@@ -25,19 +26,27 @@ public class TransactionManagerTest {
     Permit permit;
     ParkingLot parkingLot;
     private ParkingChargeStrategy mockChargeStrategy;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
 
     @BeforeEach
     void setup() {
-        address = new Address("123 Main St", "Apt 1", "Denver", "CO", "80202");
-        customer = new Customer("Jane", "Doe", address, "303-555-5555");
+        address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
+        firstName = "Jane";
+        lastName = "Doe";
+        phoneNumber = "303-555-5555";
+        Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phoneNumber).build();
         license = "123";
         type = CarType.SUV;
         car = new Car(license, type, customer);
         permitManager = new PermitManager();
         permit = permitManager.register(car);
         parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
-        mockChargeStrategy = new MockParkingChargeStrategy();
-        parkingLot.setParkingChargeStrategy(mockChargeStrategy);
+        
+        ParkingChargeStrategyFactory mockFactory = new TransactionManagerTest.MockParkingChargeStrategyFactory(); // Create a mock factory
+        parkingLot.setParkingChargeStrategyFactory(mockFactory);
+
     }
 
     /**
@@ -48,7 +57,7 @@ public class TransactionManagerTest {
         System.out.println("park");
         Instant date = Instant.now();
         String lotId = "123";
-        Money charge = new Money(10);
+        Money charge = Money.of(10);
         TransactionManager transactionManager = new TransactionManager();
         ParkingTransaction result = transactionManager.park(date, permit, parkingLot);
         assertNotNull(result);
@@ -76,13 +85,23 @@ public class TransactionManagerTest {
         Money result = instance.getParkingCharges(car);
         assertNotNull(result);
     }
+    
+    // Mock ParkingChargeStrategyFactory for testing
+    //This class uses the MockParkingChargeStrategy class to calculate the parking charge
+    private class MockParkingChargeStrategyFactory implements ParkingChargeStrategyFactory {
+
+        @Override
+        public ParkingChargeStrategy makeStrategy() {
+            return new TransactionManagerTest.MockParkingChargeStrategy(); // Return a mock strategy
+        }
+    }
 
     // Mock ParkingChargeStrategy for testing
     private class MockParkingChargeStrategy implements ParkingChargeStrategy {
 
         @Override
         public Money calculateParkingCharge(Instant date, Permit permit, Money baseRate) {
-            return new Money(10.0);
+            return Money.of(10.0);
         }
 
         @Override

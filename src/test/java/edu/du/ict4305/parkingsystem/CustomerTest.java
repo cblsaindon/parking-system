@@ -16,58 +16,58 @@ import static org.hamcrest.CoreMatchers.containsString;
  */
 public class CustomerTest {
 
-  @Test
-  public void testGetId() {
-    String firstName = "John";
-    String lastName = "Doe";
-    Address address = new Address("123 Main St", "Apt 2", "Denver", "CO", "80202");
-    String phoneNumber = "303-555-1212";
+    @Test
+    public void testGetId() {
+        String firstName = "John";
+        String lastName = "Doe";
+        Address address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
+        String phoneNumber = "303-555-1212";
 
-    Customer customer = new Customer(firstName, lastName, address, phoneNumber);
+        Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phoneNumber).build();
 
-    //String expResult = "1";
-    String result = customer.getId();
+        //String expResult = "1";
+        String result = customer.getId();
 
-    assertThat(result, containsString("cust_"));
-  }
+        assertThat(result, containsString("cust_"));
+    }
 
-  @Test
-  public void testGetPhone() {
-    String firstName = "John";
-    String lastName = "Doe";
-    Address address = new Address("123 Main St", "Apt 2", "Denver", "CO", "80202");
-    String phoneNumber = "6305551234";
+    @Test
+    public void testGetPhone() {
+        String firstName = "John";
+        String lastName = "Doe";
+        Address address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
+        String phoneNumber = "6305551234";
 
-    Customer customer = new Customer(firstName, lastName, address, phoneNumber);
+        Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phoneNumber).build();
 
-    String expResult = "6305551234";
-    String result = customer.getPhone();
+        String expResult = "6305551234";
+        String result = customer.getPhone();
 
-    assertEquals(expResult, result);
-  }
+        assertEquals(expResult, result);
+    }
 
-  /**
-   * Test of toString method, of class Customer.
-   */
-  @Test
-  public void testToString() {
-    System.out.println("toString");
+    /**
+     * Test of toString method, of class Customer.
+     */
+    @Test
+    public void testToString() {
+        System.out.println("toString");
 
-    String firstName = "John";
-    String lastName = "Doe";
-    String id = "1";
+        String firstName = "John";
+        String lastName = "Doe";
+        String id = "1";
 
-    Address address = new Address("123", "Main", "Denver", "CO", "80202");
-    String phoneNumber = "6305559545";
+        Address address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
+        String phoneNumber = "6305559545";
 
-    Customer customer = new Customer(firstName, lastName, address, phoneNumber);
+        Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phoneNumber).build();
 
-    String expResult = "edu.du.ict4305.parkingsystem.Customer" + "[firstName=" + firstName + ",lastName="+ lastName
-        + ",address=" + address + ",phoneNumber=" + phoneNumber + "]";
+        String expResult = "edu.du.ict4305.parkingsystem.Customer" + "[firstName=" + firstName + ",lastName=" + lastName
+                + ",address=" + address + ",phoneNumber=" + phoneNumber + "]";
 
-    String result = customer.toString();
-    assertEquals(expResult, result);
+        String result = customer.toString();
+        assertEquals(expResult, result);
 
-  }
+    }
 
 }

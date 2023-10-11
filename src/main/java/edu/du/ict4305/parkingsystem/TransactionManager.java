@@ -4,6 +4,7 @@
  */
 package edu.du.ict4305.parkingsystem;
 
+import edu.du.ict4315.parking.charges.factory.ParkingChargeStrategyFactory;
 import edu.du.ict4315.parking.charges.strategy.ParkingChargeStrategy;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -21,6 +22,9 @@ public class TransactionManager {
 
     private ArrayList<ParkingTransaction> transactions = new ArrayList<>();
     private HashMap<String, ArrayList<ParkingTransaction>> carTransaction = new HashMap<>();
+    private HashMap<String, ArrayList<ParkingTransaction>> permitTransaction = new HashMap<>();
+    private HashMap<String, ArrayList<ParkingTransaction>> customerTransaction = new HashMap<>();
+    private ParkingChargeStrategyFactory factory;
 
     /**
      * This method will create a parking charge and will add it to the
@@ -28,23 +32,43 @@ public class TransactionManager {
      */
     public ParkingTransaction park(Instant date, Permit permit, ParkingLot parkingLot) {
         Money baseRate = parkingLot.getBaseRate();
+        Car car = permit.getCar();
+        factory = parkingLot.getParkingChargeStrategyFactory();
+        ParkingChargeStrategy strategy = factory.makeStrategy();
+        if (strategy == null) {
+            throw new IllegalArgumentException("Null strategy");
+        }
 
-        ParkingChargeStrategy parkingChargeStrategy = parkingLot.getParkingChargeStrategy();
-        Money charge = parkingChargeStrategy.calculateParkingCharge(date, permit, baseRate);
-        ParkingTransaction transaction = new ParkingTransaction(date, permit, parkingLot, charge);
-
+        Money charge = strategy.calculateParkingCharge(date, permit, baseRate);
+        ParkingTransaction transaction = new ParkingTransaction.Builder(date, permit, parkingLot, charge).build();
         transactions.add(transaction);
+        //carTransaction.put(car, transaction);
+        //permitTransaction.put(permit, transaction);
         return transaction;
     }
 
+    public Money getParkingCharges(Customer customer) {
+        Money totalCharges = Money.of(0);
+        ArrayList<ParkingTransaction> customerTransactions = customerTransaction.get(customer);
+        if (customerTransactions == null) {
+            return totalCharges;
+        }
+        for (ParkingTransaction transaction : customerTransactions) {
+            Money charge = transaction.getAmount();
+            totalCharges = Money.add(totalCharges, charge);
+        }
+        return totalCharges;
+    }
+
     public Money getParkingCharges(Permit permit) {
-        Money totalCharges = new Money(0);
-        ArrayList<ParkingTransaction> permitTransactions = carTransaction.get(permit);
+        Money totalCharges = Money.of(0);
+        ArrayList<ParkingTransaction> permitTransactions = permitTransaction.get(permit);
         if (permitTransactions == null) {
             return totalCharges;
         }
         for (ParkingTransaction transaction : permitTransactions) {
             Money charge = transaction.getAmount();
+            totalCharges = Money.add(totalCharges, charge);
         }
         return totalCharges;
     }
@@ -53,13 +77,14 @@ public class TransactionManager {
 
         ArrayList<ParkingTransaction> carTransactions = carTransaction.get(car);
         if (carTransactions == null) {
-            return new Money(0);
+            return Money.of(0);
         }
-        Money totalCharges = new Money(0);
+        Money totalCharges = Money.of(0);
         for (ParkingTransaction transaction : carTransactions) {
             Permit permit = transaction.getPermit();
             if (permit.getCar().equals(car)) {
                 Money charge = transaction.getAmount();
+                totalCharges = Money.add(totalCharges, charge);
             }
         }
         return totalCharges;

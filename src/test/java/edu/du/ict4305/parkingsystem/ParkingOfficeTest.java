@@ -32,6 +32,9 @@ public class ParkingOfficeTest {
     Car car;
     Permit permit;
     ParkingLot parkingLot;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
 
     @BeforeEach
     void setup() {
@@ -41,8 +44,11 @@ public class ParkingOfficeTest {
         charges = new ArrayList<>();
         permitManager = new PermitManager();
         parkingOffice = new ParkingOffice("Parking Office", address, customers, cars, lots);
-        address = new Address("123 Main St", "Apt 1", "Denver", "CO", "80202");
-        customer = new Customer("Jane", "Doe", address, "303-555-5555");
+        address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
+        firstName = "Jane";
+        lastName = "Doe";
+        phoneNumber = "303-555-5555";
+        Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phoneNumber).build();
         license = "123";
         type = CarType.SUV;
         car = new Car(license, type, customer);

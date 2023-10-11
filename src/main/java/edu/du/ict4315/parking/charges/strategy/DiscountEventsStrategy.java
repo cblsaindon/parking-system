@@ -23,24 +23,20 @@ import java.time.ZonedDateTime;
  */
 public class DiscountEventsStrategy implements ParkingChargeStrategy {
 
-    Permit permit;
-    Car car;
-    ParkingLot parkingLot;
-    ParkingLotType parkingLotType;
-    CarType carType;
-    Money carTypeCharge;
-    Money lineItemCharge;
-    Money totalCharge;
-    
+    private Car car;
+    private Money carTypeCharge;
+    private Money lineItemCharge;
+    private Money totalCharge;
+
     //These money values should be stored in a database
-    Money nonEventCharge = new Money(10);
-    Money eventCharge = new Money(20);    
+    Money nonEventCharge = Money.of(10);
+    Money eventCharge = Money.of(20);
 
     @Override
     public Money calculateParkingCharge(Instant date, Permit permit, Money baseRate) {
         //set the base rate
         if (totalCharge == null) {
-            totalCharge = new Money(0);
+            totalCharge = Money.of(0);
         } else {
             totalCharge = baseRate;
         }
@@ -48,7 +44,7 @@ public class DiscountEventsStrategy implements ParkingChargeStrategy {
         //Get the discounted rate based on the car type
         car = permit.getCar();
         double discountedRate = getDiscountedRate(car, totalCharge);
-        carTypeCharge = new Money(discountedRate);
+        carTypeCharge = Money.of(discountedRate);
         totalCharge = Money.add(totalCharge, carTypeCharge);
 
         //Give rate if there is an event going on

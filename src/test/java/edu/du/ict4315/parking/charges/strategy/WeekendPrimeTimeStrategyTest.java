@@ -35,13 +35,19 @@ public class WeekendPrimeTimeStrategyTest {
     private Address address;
     private Customer customer;
     private PermitManager permitManager;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
 
     @Before
     public void setUp() {
         strategy = new WeekendPrimeTimeStrategy();
-        address = new Address("123 Main St", "Apt 1", "Denver", "CO", "80202");
+        address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
         parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
-        customer = new Customer("Jane", "Doe", address, "303-555-5555");
+        firstName = "Jane";
+        lastName = "Doe";
+        phoneNumber = "303-555-5555";
+        Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phoneNumber).build();
         car = new Car("123", CarType.COMPACT, customer);
         permit = permitManager.register(car);
     }
@@ -50,13 +56,13 @@ public class WeekendPrimeTimeStrategyTest {
     public void testCalculateParkingCharge_WeekdayPrimeTime() {
         // Create an Instant for a weekday prime time (adjust date and time as needed)
         Instant weekdayPrimeTime = Instant.parse("2023-09-20T19:30:00Z");
-        Money baseRate = new Money(10.0); // Adjust the base rate as needed
+        Money baseRate = Money.of(10.0); // Adjust the base rate as needed
 
         Money charge = strategy.calculateParkingCharge(weekdayPrimeTime, permit, baseRate);
 
         // Calculate the expected charge manually based on your logic
         double expectedCharge = 10.0 + 40.0; // Weekday charge + Prime time charge
-        Money expectedMoney = new Money(expectedCharge);
+        Money expectedMoney = Money.of(expectedCharge);
 
         assertEquals(expectedMoney, charge);
     }
@@ -65,13 +71,13 @@ public class WeekendPrimeTimeStrategyTest {
     public void testCalculateParkingCharge_WeekdayDaytime() {
         // Create an Instant for a weekday daytime (adjust date and time as needed)
         Instant weekdayDaytime = Instant.parse("2023-09-20T12:00:00Z");
-        Money baseRate = new Money(10.0); // Adjust the base rate as needed
+        Money baseRate = Money.of(10.0); // Adjust the base rate as needed
 
         Money charge = strategy.calculateParkingCharge(weekdayDaytime, permit, baseRate);
 
         // Calculate the expected charge manually based on your logic
         double expectedCharge = 10.0 + 20.0; // Weekday charge + Daytime charge
-        Money expectedMoney = new Money(expectedCharge);
+        Money expectedMoney = Money.of(expectedCharge);
 
         assertEquals(expectedMoney, charge);
     }
@@ -80,13 +86,13 @@ public class WeekendPrimeTimeStrategyTest {
     public void testCalculateParkingCharge_WeekendPrimeTime() {
         // Create an Instant for a weekend prime time (adjust date and time as needed)
         Instant weekendPrimeTime = Instant.parse("2023-09-23T21:00:00Z");
-        Money baseRate = new Money(10.0); // Adjust the base rate as needed
+        Money baseRate = Money.of(10.0); // Adjust the base rate as needed
 
         Money charge = strategy.calculateParkingCharge(weekendPrimeTime, permit, baseRate);
 
         // Calculate the expected charge manually based on your logic
         double expectedCharge = 10.0 + 20.0 + 40.0; // Weekend charge + Prime time charge
-        Money expectedMoney = new Money(expectedCharge);
+        Money expectedMoney = Money.of(expectedCharge);
 
         assertEquals(expectedMoney, charge);
     }
@@ -95,13 +101,13 @@ public class WeekendPrimeTimeStrategyTest {
     public void testCalculateParkingCharge_WeekendDaytime() {
         // Create an Instant for a weekend daytime (adjust date and time as needed)
         Instant weekendDaytime = Instant.parse("2023-09-23T14:00:00Z");
-        Money baseRate = new Money(10.0); // Adjust the base rate as needed
+        Money baseRate = Money.of(10.0); // Adjust the base rate as needed
 
         Money charge = strategy.calculateParkingCharge(weekendDaytime, permit, baseRate);
 
         // Calculate the expected charge manually based on your logic
         double expectedCharge = 10.0 + 20.0; // Weekend charge + Daytime charge
-        Money expectedMoney = new Money(expectedCharge);
+        Money expectedMoney = Money.of(expectedCharge);
 
         assertEquals(expectedMoney, charge);
     }

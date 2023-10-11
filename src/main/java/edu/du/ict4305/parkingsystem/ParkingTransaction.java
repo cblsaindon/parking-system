@@ -12,52 +12,73 @@ import java.util.Objects;
  *
  * @author candace.saindon
  */
-public class ParkingTransaction<T extends Money> {
+public class ParkingTransaction {
 
-  private Permit permit;
-  private ParkingLot parkingLot;
-  private Instant incurred;
-  private T amount;
+    private final Permit permit;
+    private final ParkingLot parkingLot;
+    private final Instant incurred;
+    private final Money amount;
 
-  public ParkingTransaction(Instant incurred, Permit permit, ParkingLot parkingLot, T amount) {
-    this.permit = permit;
-    this.parkingLot = parkingLot;
-    this.incurred = incurred;
-    this.amount = amount;
-  }
+    public static class Builder {
 
-  public T getAmount() {
-    return amount;
-  }
-  
-  public Permit getPermit() {
-    return permit;
-  }
-  
+        //Required parameters
+        private final Permit permit;
+        private final ParkingLot parkingLot;
+        private final Instant incurred;
+        private final Money amount;
 
-  
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+        //Optional parameters - initialized to default values
+        //none
+        
+        public Builder(Instant incurred, Permit permit, ParkingLot parkingLot, Money amount) {
+            this.permit = permit;
+            this.parkingLot = parkingLot;
+            this.incurred = incurred;
+            this.amount = amount;
+        }
+
+        public ParkingTransaction build() {
+            return new ParkingTransaction(this);
+        }
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    private ParkingTransaction(Builder builder) {
+        permit = builder.permit;
+        parkingLot = builder.parkingLot;
+        incurred = builder.incurred;
+        amount = builder.amount;
     }
-    ParkingTransaction<?> that = (ParkingTransaction<?>) o;
-    return Objects.equals(permit, that.permit)
-        && Objects.equals(parkingLot, that.parkingLot)
-        && Objects.equals(incurred, that.incurred)
-        && Objects.equals(amount, that.amount);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(permit, parkingLot, incurred, amount);
-  }
+    public Money getAmount() {
+        return amount;
+    }
 
-  public String toString() {
-    return getClass().getName() + "[permit=" + permit + ", parkinglot=" + parkingLot
-        + ",incurred=" + incurred + ", amount=" + amount + "]";
-  }
+    public Permit getPermit() {
+        return permit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ParkingTransaction that = (ParkingTransaction) o;
+        return Objects.equals(permit, that.permit)
+                && Objects.equals(parkingLot, that.parkingLot)
+                && Objects.equals(incurred, that.incurred)
+                && Objects.equals(amount, that.amount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(permit, parkingLot, incurred, amount);
+    }
+
+    public String toString() {
+        return getClass().getName() + "[permit=" + permit + ", parkinglot=" + parkingLot
+                + ",incurred=" + incurred + ", amount=" + amount + "]";
+    }
 }

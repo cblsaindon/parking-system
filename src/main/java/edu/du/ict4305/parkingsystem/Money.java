@@ -18,12 +18,23 @@ public class Money implements Comparable<Money> {
     private long amount;
     private final Currency currency;
 
+    public static Money of(double amt) {
+        return Money.of(amt, Currency.getInstance("USD"));
+    }
+
+    public static Money of(String moneyString) {
+        return new Money(moneyString);
+    }
+
+    public static Money of(double amt, Currency currency) {
+        return new Money(amt, currency);
+    }
 
     /*
      * Multiply the amount by 10^currency fraction digits
      * to represent the
      */
-    public Money(double money, Currency currency) {
+    private Money(double money, Currency currency) {
         this.currency = currency;
         int fractionDigits = currency.getDefaultFractionDigits();
         if (fractionDigits < 0) {
@@ -32,7 +43,7 @@ public class Money implements Comparable<Money> {
         amount = Math.round(money * Math.pow(10, fractionDigits));
     }
 
-    public Money(double money) {
+    private Money(double money) {
         this.currency = Currency.getInstance("USD");
         int fractionDigits = currency.getDefaultFractionDigits();
         if (fractionDigits < 0) {
@@ -100,14 +111,14 @@ public class Money implements Comparable<Money> {
     }
 
     public static Money add(Money moneyOne, Money moneyTwo) {
- 
+
         return new Money(moneyOne.getCents() + moneyTwo.getCents(), moneyOne.currency);
     }
-    
+
     private long getCents() {
         return amount;
     }
-    
+
     @Override
     public int compareTo(Money money) {
         if (!currency.equals(money.currency)) {

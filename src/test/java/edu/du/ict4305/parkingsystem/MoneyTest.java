@@ -16,7 +16,7 @@ public class MoneyTest {
   @Test
   public void testGetDollars() {
     System.out.println("getDollars");
-    Money instance = new Money(10.0);
+    Money instance = Money.of(10.0);
     double expResult = 10.0;
     double result = instance.getDollars();
     assertEquals(expResult, result, 0.0);
@@ -26,7 +26,7 @@ public class MoneyTest {
   public void testToString() {
     System.out.println("toString");
     long cents = 1000;
-    Money instance = new Money(10);
+    Money instance = Money.of(10);
     String expResult = "edu.du.ict4305.parkingsystem.Money[cents=" + cents + "]";
 
     String result = instance.toString();

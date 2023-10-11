@@ -4,6 +4,7 @@
  */
 package edu.du.ict4305.parkingsystem;
 
+import edu.du.ict4315.parking.charges.factory.ParkingChargeStrategyFactory;
 import edu.du.ict4315.parking.charges.strategy.ParkingChargeStrategy;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -23,11 +24,17 @@ public class ParkingLotTest {
     private Car car;
     private ParkingLot parkingLot;
     private ParkingChargeStrategy mockChargeStrategy;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
 
     @BeforeEach
     public void setUpClass() {
-        address = new Address("1 Main St", "", "Denver", "CO", "80202");
-        customer = new Customer("Jane", "Doe", address, "303-555-5555");
+        address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
+        firstName = "Jane";
+        lastName = "Doe";
+        phoneNumber = "303-555-5555";
+        Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phoneNumber).build();
         String license = "123";
         CarType type = CarType.SUV;
         car = new Car(license, type, customer);
@@ -184,31 +191,38 @@ public class ParkingLotTest {
 
     @Test
     public void testSetParkingChargeStrategy() {
-        parkingLot.setParkingChargeStrategy(mockChargeStrategy);
-        assertEquals(mockChargeStrategy, parkingLot.getParkingChargeStrategy());
+        ParkingChargeStrategyFactory mockFactory = new MockParkingChargeStrategyFactory(); // Create a mock factory
+        parkingLot.setParkingChargeStrategyFactory(mockFactory);
+        assertEquals(mockFactory, parkingLot.getParkingChargeStrategyFactory());
     }
 
     @Test
     public void testGetParkingCharge() {
-        parkingLot.setParkingChargeStrategy(mockChargeStrategy);
+        ParkingChargeStrategyFactory mockFactory = new MockParkingChargeStrategyFactory(); // Create a mock factory
+        parkingLot.setParkingChargeStrategyFactory(mockFactory);
 
-        // Create a sample Instant and Permit
-        Instant sampleInstant = ZonedDateTime.of(2023, 9, 15, 12, 0, 0, 0, ZoneId.systemDefault()).toInstant();
-        Permit samplePermit = new Permit("Sample Permit", car);
-
-        // Calculate the parking charge using the mock strategy
-        Money charge = parkingLot.getParkingCharge(sampleInstant, samplePermit);
+        // Calculate the parking charge using the configured factory
+        Money charge = parkingLot.getParkingCharge(Instant.now(), new Permit("Sample Permit", car));
 
         // expected charge value vs. the mock strategy
-        assertEquals(new Money(10.0).getDollars(), charge.getDollars()); // Adjust the expected value accordingly
+        assertEquals(Money.of(10.0).getDollars(), charge.getDollars()); // Adjust the expected value accordingly
     }
 
-    // Mock ParkingChargeStrategy for testing
+// Mock ParkingChargeStrategyFactory for testing
+    private class MockParkingChargeStrategyFactory implements ParkingChargeStrategyFactory {
+
+        @Override
+        public ParkingChargeStrategy makeStrategy() {
+            return new MockParkingChargeStrategy(); // Return a mock strategy
+        }
+    }
+
+// Mock ParkingChargeStrategy for testing
     private class MockParkingChargeStrategy implements ParkingChargeStrategy {
 
         @Override
         public Money calculateParkingCharge(Instant date, Permit permit, Money baseRate) {
-            return new Money(10.0);
+            return Money.of(10.0);
         }
 
         @Override

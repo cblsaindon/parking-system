@@ -15,6 +15,6 @@ import java.time.Instant;
  */
 public interface ParkingChargeStrategy {
 
-    String getStrategyName();
+    public String getStrategyName();
     public Money calculateParkingCharge(Instant date, Permit permit, Money baseRate);
 }
