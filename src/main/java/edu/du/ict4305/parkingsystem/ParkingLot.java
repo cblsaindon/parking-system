@@ -1,191 +1,50 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- * Money, parking charge, and parking office classes come later
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package edu.du.ict4305.parkingsystem;
 
 /**
- * Class for ParkingLot that allows a car to enter or exit and calculates the
- * associated charges.
  *
  * @author candace.saindon
  */
 import edu.du.ict4315.parking.charges.factory.ParkingChargeStrategyFactory;
-import edu.du.ict4315.parking.charges.strategy.ParkingChargeStrategy;
-import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class ParkingLot {
+public interface ParkingLot {
 
-    private String lotId;
-    private Address address;
-    private int capacity;
-    private int carsInLot;
-    private ParkingLotType lotType;
-    private Money baseRate = Money.of(5.00);
-    private ParkingChargeStrategyFactory strategyFactory;
-    private List<ParkingObserver> observers = new ArrayList<>();
+    String getLotId();
 
-    public ParkingLot(String lotId, Address address, int capacity, ParkingLotType lotType) {
-        if (lotId == null || lotId.isEmpty()) {
-            throw new IllegalArgumentException("The lot id must not be null or empty");
-        }
+    Address getAddress();
 
-        this.lotId = lotId;
-        this.address = address;
-        this.capacity = capacity;
-        this.lotType = lotType;
-        this.carsInLot = 0;
-    }
+    int getCapacity();
 
-    public String getLotId() {
-        return lotId;
-    }
+    Money getBaseRate();
 
-    public Address getAddress() {
-        return address;
-    }
+    int getCarsInLot();
 
-    public int getCapacity() {
-        return capacity;
-    }
+    int getEmptySlots();
 
-    public Money getBaseRate() {
-        return baseRate;
-    }
+    ParkingLotType getLotType();
 
-    public int getCarsInLot() {
-        return carsInLot;
-    }
+    ParkingChargeStrategyFactory getParkingChargeStrategyFactory();
 
-    public int getEmptySlots() {
-        int emptySlots = capacity - carsInLot;
-        return emptySlots;
-    }
+    void setParkingChargeStrategyFactory(ParkingChargeStrategyFactory factory);
 
-    public ParkingLotType getLotType() {
-        return lotType;
-    }
+    Money getParkingCharge(ParkingEvent event);
 
-    public ParkingChargeStrategyFactory getParkingChargeStrategyFactory() {
-        return strategyFactory;
-    }
+    void registerObserver(ParkingObserver observer);
 
-    public void setParkingChargeStrategyFactory(ParkingChargeStrategyFactory factory) {
-        this.strategyFactory = factory;
-    }
+    void unregisterObserver(ParkingObserver observer);
 
-    public Money getParkingCharge(ParkingEvent event) {
-        ParkingChargeStrategy strategy = strategyFactory.makeStrategy();
-        Money charge = strategy.calculateParkingCharge(event, baseRate);
-        return charge;
-    }
+    void notifyObservers(ParkingEvent event);
 
-    public void registerObserver(ParkingObserver observer) {
-        observers.add(observer);
-    }
+    List<ParkingObserver> getObservers();
 
-    public void unregisterObserver(ParkingObserver observer) {
-        observers.remove(observer);
-    }
+    void enterLot(Instant timeIn, Permit permit);
 
-    public void notifyObservers(ParkingEvent event) {
-        for (ParkingObserver observer : observers) {
-            observer.update(event);
-        }
-    }
-
-    public List<ParkingObserver> getObservers() {
-        return observers;
-    }
+    void exitLot(Instant timeIn, Instant timeOut, Permit permit);
     
-    // Method for permit-required-on-enter lot
-    public void enterLot(Instant timeIn, Permit permit) {
-        ParkingEvent event = new ParkingEvent(this, permit, timeIn);
-        notifyObservers(event);
-    }
-
-    // Method for permit-required-on-exit lot
-    public void exitLot(Instant timeIn, Instant timeOut, Permit permit) {
-        ParkingEvent event = new ParkingEvent(this, permit, timeIn, timeOut);
-        notifyObservers(event);
-    }
-
-    // A method to allow a car to enter a parking lot.
-    public void increaseLotCount(Car car) {
-
-        try {
-
-            if (car == null) {
-                throw new IllegalArgumentException("Car must not be null");
-            }
-
-            if (car.getLotEnter() != null) {
-                throw new IllegalStateException("Car is already in a parking lot");
-            }
-
-            int emptySlots = capacity - carsInLot;
-
-            if (emptySlots <= 0) {
-                throw new IllegalStateException("Parking lot is full");
-            }
-
-            carsInLot++;
-
-            Instant lotEnterTime = Instant.now();
-            car.setLotEnter(lotEnterTime);
-
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            System.out.println("Error: " + e.getMessage());
-            throw e;
-        }
-
-    }
-
-    // A method to allow a car to exit a parking lot.
-    public void decreaseLotCount(Car car) {
-
-        if (car == null) {
-            throw new IllegalArgumentException("Car must not be null");
-        }
-
-        if (carsInLot <= 0) {
-            throw new IllegalStateException("Parking lot is already empty");
-        }
-
-        car.setLotEnter(null);
-        carsInLot--;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        ParkingLot that = (ParkingLot) o;
-        return capacity == that.capacity
-                && carsInLot == that.carsInLot
-                && Objects.equals(lotId, that.lotId)
-                && Objects.equals(address, that.address)
-                && lotType == that.lotType;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(lotId, address, capacity, carsInLot, lotType);
-    }
-
-    public String toString() {
-        return getClass().getName() + "[lotId=" + lotId + ", address=" + address
-                + ",capacity=" + capacity + ", carsInLot=" + carsInLot + "]";
-    }
-
 }
+

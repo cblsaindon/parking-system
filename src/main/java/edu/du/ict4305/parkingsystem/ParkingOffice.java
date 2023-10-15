@@ -23,18 +23,18 @@ public class ParkingOffice implements ParkingObserver {
     private String name; // name of the Parking Office
     private Address address; // address of the Parking Office
     private List<Car> cars; // list of registered cars
-    private List<ParkingLot> lots; // list of parking lots
+    private List<RealParkingLot> lots; // list of parking lots
     private List<ParkingTransaction> charges; // list of parking charges
     private TransactionManager transactionManager;
     private PermitManager permitManager;
 
     private Map<String, Customer> customerToIdMap; // map of customers keyed by their ID keytovalue
     private Map<String, Customer> customerToPhoneMap; // map of customers keyed by their phone number
-    private Map<String, ParkingLot> parkingLotToType; // map of parking lots keyed by their lot types
+    private Map<String, RealParkingLot> parkingLotToType; // map of parking lots keyed by their lot types
     private Map<Customer, String> permitToCustomerMap; // map of customers keyed by their phone number
 
     public ParkingOffice(String name, Address address, List<Customer> customers,
-            List<Car> cars, List<ParkingLot> lots) {
+            List<Car> cars, List<RealParkingLot> lots) {
         this.name = name;
         this.address = address;
         this.cars = cars;
@@ -83,7 +83,7 @@ public class ParkingOffice implements ParkingObserver {
     }
 
     //Register parking lot and use register observer
-    public void addParkingLot(ParkingLot parkingLot) throws Exception {
+    public void addParkingLot(RealParkingLot parkingLot) throws Exception {
         if (!lots.contains(parkingLot)) {
             parkingLot.registerObserver(this);
             lots.add(parkingLot);
@@ -92,8 +92,8 @@ public class ParkingOffice implements ParkingObserver {
         }
     }
 
-    public List<ParkingLot> getListOfParkingLot() {
-        List<ParkingLot> copy = new ArrayList<>(lots);
+    public List<RealParkingLot> getListOfParkingLot() {
+        List<RealParkingLot> copy = new ArrayList<>(lots);
         return copy;
     }
 
@@ -162,7 +162,7 @@ public class ParkingOffice implements ParkingObserver {
     }
 
     // Retrieves a customer from the list of customers based on the customer's driver's license
-    public ParkingLot getLotTypeByLotId(String lotId) {
+    public RealParkingLot getLotTypeByLotId(String lotId) {
         return parkingLotToType.get(lotId);
     }
 

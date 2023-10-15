@@ -15,7 +15,7 @@ import java.util.Objects;
 public class ParkingTransaction {
 
     private final Permit permit;
-    private final ParkingLot parkingLot;
+    private final RealParkingLot parkingLot;
     private final Instant incurred;
     private final Money amount;
 
@@ -23,14 +23,14 @@ public class ParkingTransaction {
 
         //Required parameters
         private final Permit permit;
-        private final ParkingLot parkingLot;
+        private final RealParkingLot parkingLot;
         private final Instant incurred;
         private final Money amount;
 
         //Optional parameters - initialized to default values
         //none
         
-        public Builder(Instant incurred, Permit permit, ParkingLot parkingLot, Money amount) {
+        public Builder(Instant incurred, Permit permit, RealParkingLot parkingLot, Money amount) {
             this.permit = permit;
             this.parkingLot = parkingLot;
             this.incurred = incurred;

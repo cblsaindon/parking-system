@@ -12,26 +12,26 @@ import java.time.Instant;
  */
 public class ParkingEvent {
 
-    private ParkingLot lot;
+    private RealParkingLot lot;
     private Instant timeIn;
     private Instant timeOut;
     private Permit permit;
 
-    public ParkingEvent(ParkingLot lot, Permit permit, Instant timeIn) {
+    public ParkingEvent(RealParkingLot lot, Permit permit, Instant timeIn) {
         this.lot = lot;
         this.timeIn = timeIn;
         this.timeOut = null;
         this.permit = permit;
     }
 
-    public ParkingEvent(ParkingLot lot, Permit permit, Instant timeIn, Instant timeOut) {
+    public ParkingEvent(RealParkingLot lot, Permit permit, Instant timeIn, Instant timeOut) {
         this.lot = lot;
         this.timeIn = timeIn;
         this.timeOut = timeOut;
         this.permit = permit;
     }
 
-    public ParkingLot getParkingLot() {
+    public RealParkingLot getParkingLot() {
         return lot;
     }
 

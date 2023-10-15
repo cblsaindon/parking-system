@@ -35,7 +35,7 @@ public class TransactionManager {
         Money charge;
         
         //Get values needed to create the parking transaction
-        ParkingLot lot = event.getParkingLot();
+        RealParkingLot lot = event.getParkingLot();
         Permit permit = event.getPermit();
         Instant timeIn = event.getTimeIn();
         Instant timeOut = event.getTimeOut();
