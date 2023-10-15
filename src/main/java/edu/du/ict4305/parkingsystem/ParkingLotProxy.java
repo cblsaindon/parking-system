@@ -15,9 +15,18 @@ import java.util.List;
 public class ParkingLotProxy implements ParkingLot {
 
     private RealParkingLot realParkingLot;
+    private String lotId;
+    private Address address;
+    private int capacity;
+    private ParkingLotType lotType;
 
-    public ParkingLotProxy(RealParkingLot realParkingLot) {
-        this.realParkingLot = realParkingLot;
+    public ParkingLotProxy(String lotId, Address address, int capacity, ParkingLotType lotType) {
+        // You can include any validation or processing specific to the proxy here.
+        this.lotId = lotId;
+        this.address = address;
+        this.capacity = capacity;
+        this.lotType = lotType;
+        this.realParkingLot = new RealParkingLot(lotId, address, capacity, lotType);
     }
 
     @Override
