@@ -29,7 +29,7 @@ public class ParkingLot {
     private ParkingLotType lotType;
     private Money baseRate = Money.of(5.00);
     private ParkingChargeStrategyFactory strategyFactory;
-    private List<ParkingAction> observers = new ArrayList<>();
+    private List<ParkingObserver> observers = new ArrayList<>();
 
     public ParkingLot(String lotId, Address address, int capacity, ParkingLotType lotType) {
         if (lotId == null || lotId.isEmpty()) {
@@ -80,40 +80,44 @@ public class ParkingLot {
         this.strategyFactory = factory;
     }
 
-    public Money getParkingCharge(Instant date, Permit permit) {
+    public Money getParkingCharge(ParkingEvent event) {
         ParkingChargeStrategy strategy = strategyFactory.makeStrategy();
-        Money charge = strategy.calculateParkingCharge(date, permit, baseRate);
+        Money charge = strategy.calculateParkingCharge(event, baseRate);
         return charge;
     }
 
-    public void registerObserver(ParkingAction observer) {
+    public void registerObserver(ParkingObserver observer) {
         observers.add(observer);
     }
 
-    public void unregisterObserver(ParkingAction observer) {
+    public void unregisterObserver(ParkingObserver observer) {
         observers.remove(observer);
     }
 
     public void notifyObservers(ParkingEvent event) {
-        for (ParkingAction observer : observers) {
+        for (ParkingObserver observer : observers) {
             observer.update(event);
         }
     }
 
+    public List<ParkingObserver> getObservers() {
+        return observers;
+    }
+    
     // Method for permit-required-on-enter lot
-    public void enterLot(LocalDateTime timeIn, Permit permit) {
+    public void enterLot(Instant timeIn, Permit permit) {
         ParkingEvent event = new ParkingEvent(this, permit, timeIn);
         notifyObservers(event);
     }
 
     // Method for permit-required-on-exit lot
-    public void exitLot(LocalDateTime timeIn, LocalDateTime timeOut, Permit permit) {
-        ParkingEvent event = new ParkingEvent(this, permit, timeIn);
+    public void exitLot(Instant timeIn, Instant timeOut, Permit permit) {
+        ParkingEvent event = new ParkingEvent(this, permit, timeIn, timeOut);
         notifyObservers(event);
     }
 
     // A method to allow a car to enter a parking lot.
-    public void entry(Car car) {
+    public void increaseLotCount(Car car) {
 
         try {
 
@@ -144,7 +148,7 @@ public class ParkingLot {
     }
 
     // A method to allow a car to exit a parking lot.
-    public void exit(Car car) {
+    public void decreaseLotCount(Car car) {
 
         if (car == null) {
             throw new IllegalArgumentException("Car must not be null");

@@ -4,43 +4,45 @@
  */
 package edu.du.ict4305.parkingsystem;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  *
  * @author candace.saindon
  */
 public class ParkingEvent {
+
     private ParkingLot lot;
-    private LocalDateTime timeIn;
-    private LocalDateTime timeOut;
+    private Instant timeIn;
+    private Instant timeOut;
     private Permit permit;
 
-    public ParkingEvent(ParkingLot lot, Permit permit, LocalDateTime timeIn) {
+    public ParkingEvent(ParkingLot lot, Permit permit, Instant timeIn) {
         this.lot = lot;
         this.timeIn = timeIn;
+        this.timeOut = null;
         this.permit = permit;
     }
-    
-    public ParkingEvent(ParkingLot lot, Permit permit, LocalDateTime timeIn, LocalDateTime timeOut) {
+
+    public ParkingEvent(ParkingLot lot, Permit permit, Instant timeIn, Instant timeOut) {
         this.lot = lot;
         this.timeIn = timeIn;
         this.timeOut = timeOut;
         this.permit = permit;
     }
-    
-    public ParkingLot getLot() {
+
+    public ParkingLot getParkingLot() {
         return lot;
     }
-    
-    public LocalDateTime getTimeIn() {
+
+    public Instant getTimeIn() {
         return timeIn;
     }
-    
-    public LocalDateTime getTimeOut() {
+
+    public Instant getTimeOut() {
         return timeOut;
     }
-    
+
     public Permit getPermit() {
         return permit;
     }

@@ -9,6 +9,7 @@ import edu.du.ict4305.parkingsystem.CarType;
 import edu.du.ict4305.parkingsystem.Car;
 import edu.du.ict4305.parkingsystem.Customer;
 import edu.du.ict4305.parkingsystem.Money;
+import edu.du.ict4305.parkingsystem.ParkingEvent;
 import edu.du.ict4305.parkingsystem.ParkingLotType;
 import edu.du.ict4305.parkingsystem.ParkingLot;
 import edu.du.ict4305.parkingsystem.Permit;
@@ -58,7 +59,8 @@ public class WeekendPrimeTimeStrategyTest {
         Instant weekdayPrimeTime = Instant.parse("2023-09-20T19:30:00Z");
         Money baseRate = Money.of(10.0); // Adjust the base rate as needed
 
-        Money charge = strategy.calculateParkingCharge(weekdayPrimeTime, permit, baseRate);
+        ParkingEvent event = new ParkingEvent(parkingLot, permit, weekdayPrimeTime);
+        Money charge = strategy.calculateParkingCharge(event, baseRate);
 
         // Calculate the expected charge manually based on your logic
         double expectedCharge = 10.0 + 40.0; // Weekday charge + Prime time charge
@@ -73,7 +75,8 @@ public class WeekendPrimeTimeStrategyTest {
         Instant weekdayDaytime = Instant.parse("2023-09-20T12:00:00Z");
         Money baseRate = Money.of(10.0); // Adjust the base rate as needed
 
-        Money charge = strategy.calculateParkingCharge(weekdayDaytime, permit, baseRate);
+        ParkingEvent event = new ParkingEvent(parkingLot, permit, weekdayDaytime);
+        Money charge = strategy.calculateParkingCharge(event, baseRate);
 
         // Calculate the expected charge manually based on your logic
         double expectedCharge = 10.0 + 20.0; // Weekday charge + Daytime charge
@@ -88,7 +91,8 @@ public class WeekendPrimeTimeStrategyTest {
         Instant weekendPrimeTime = Instant.parse("2023-09-23T21:00:00Z");
         Money baseRate = Money.of(10.0); // Adjust the base rate as needed
 
-        Money charge = strategy.calculateParkingCharge(weekendPrimeTime, permit, baseRate);
+        ParkingEvent event = new ParkingEvent(parkingLot, permit, weekendPrimeTime);
+        Money charge = strategy.calculateParkingCharge(event, baseRate);
 
         // Calculate the expected charge manually based on your logic
         double expectedCharge = 10.0 + 20.0 + 40.0; // Weekend charge + Prime time charge
@@ -103,7 +107,8 @@ public class WeekendPrimeTimeStrategyTest {
         Instant weekendDaytime = Instant.parse("2023-09-23T14:00:00Z");
         Money baseRate = Money.of(10.0); // Adjust the base rate as needed
 
-        Money charge = strategy.calculateParkingCharge(weekendDaytime, permit, baseRate);
+        ParkingEvent event = new ParkingEvent(parkingLot, permit, weekendDaytime);
+        Money charge = strategy.calculateParkingCharge(event, baseRate);
 
         // Calculate the expected charge manually based on your logic
         double expectedCharge = 10.0 + 20.0; // Weekend charge + Daytime charge

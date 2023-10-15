@@ -43,7 +43,7 @@ public class TransactionManagerTest {
         permitManager = new PermitManager();
         permit = permitManager.register(car);
         parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
-        
+
         ParkingChargeStrategyFactory mockFactory = new TransactionManagerTest.MockParkingChargeStrategyFactory(); // Create a mock factory
         parkingLot.setParkingChargeStrategyFactory(mockFactory);
 
@@ -56,10 +56,11 @@ public class TransactionManagerTest {
     public void testPark() {
         System.out.println("park");
         Instant date = Instant.now();
+        ParkingEvent event = new ParkingEvent(parkingLot, permit, date, date);
         String lotId = "123";
         Money charge = Money.of(10);
         TransactionManager transactionManager = new TransactionManager();
-        ParkingTransaction result = transactionManager.park(date, permit, parkingLot);
+        ParkingTransaction result = transactionManager.park(event);
         assertNotNull(result);
     }
 
@@ -85,7 +86,7 @@ public class TransactionManagerTest {
         Money result = instance.getParkingCharges(car);
         assertNotNull(result);
     }
-    
+
     // Mock ParkingChargeStrategyFactory for testing
     //This class uses the MockParkingChargeStrategy class to calculate the parking charge
     private class MockParkingChargeStrategyFactory implements ParkingChargeStrategyFactory {
@@ -100,7 +101,7 @@ public class TransactionManagerTest {
     private class MockParkingChargeStrategy implements ParkingChargeStrategy {
 
         @Override
-        public Money calculateParkingCharge(Instant date, Permit permit, Money baseRate) {
+        public Money calculateParkingCharge(ParkingEvent event, Money baseRate) {
             return Money.of(10.0);
         }
 

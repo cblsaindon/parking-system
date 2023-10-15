@@ -18,7 +18,7 @@ import java.util.Set;
  *
  * @author candace.saindon
  */
-public class ParkingOffice implements Office {
+public class ParkingOffice implements ParkingObserver {
 
     private String name; // name of the Parking Office
     private Address address; // address of the Parking Office
@@ -43,6 +43,7 @@ public class ParkingOffice implements Office {
         customerToIdMap = new HashMap<>();
         customerToPhoneMap = new HashMap<>();
         permitToCustomerMap = new HashMap<>();
+        charges = new ArrayList<>();
 
         // Initialize TransactionManager and PermitManager
         this.transactionManager = new TransactionManager();
@@ -50,7 +51,6 @@ public class ParkingOffice implements Office {
     }
 
     // Method to register a customer with the Parking Office.
-    @Override
     public Customer register(String firstName, String lastName, String address1,
             String address2, String city,
             String state, String zipCode, String phone) {
@@ -82,12 +82,31 @@ public class ParkingOffice implements Office {
         return car;
     }
 
+    //Register parking lot and use register observer
+    public void addParkingLot(ParkingLot parkingLot) throws Exception {
+        if (!lots.contains(parkingLot)) {
+            parkingLot.registerObserver(this);
+            lots.add(parkingLot);
+        } else {
+            throw new Exception("Parking lot already added");
+        }
+    }
+
+    public List<ParkingLot> getListOfParkingLot() {
+        List<ParkingLot> copy = new ArrayList<>(lots);
+        return copy;
+    }
+
     public String getParkingOfficeName() {
         return name;
     }
 
     public List<ParkingTransaction> getCharges() {
         return charges;
+    }
+    
+    public void addCharge(ParkingTransaction charge) {
+        charges.add(charge);
     }
 
     public List<Car> getCars() {
@@ -127,7 +146,6 @@ public class ParkingOffice implements Office {
     }
 
     // Retrieves a customer from the list of customers based on the customer's first and last name.
-    @Override
     public Customer getCustomerByName(String firstName, String lastName) {
         for (Map.Entry<String, Customer> entry : customerToIdMap.entrySet()) {
             Customer c = entry.getValue();
@@ -139,7 +157,6 @@ public class ParkingOffice implements Office {
     }
 
     // Retrieves a customer from the list of customers based on the customer's phone number.
-    @Override
     public Customer getCustomerByPhone(String phone) {
         return customerToPhoneMap.get(phone);
     }
@@ -149,8 +166,8 @@ public class ParkingOffice implements Office {
         return parkingLotToType.get(lotId);
     }
 
-    public ParkingTransaction park(Instant date, Permit permit, ParkingLot parkingLot) {
-        return transactionManager.park(date, permit, parkingLot);
+    public ParkingTransaction park(ParkingEvent event) {
+        return transactionManager.park(event);
     }
 
     public Money getParkingCharges(Car car) {
@@ -163,6 +180,12 @@ public class ParkingOffice implements Office {
 
     public Permit getPermit(String permitId) {
         return permitManager.findPermit(permitId);
+    }
+
+    @Override
+    public void update(ParkingEvent event) {
+        ParkingTransaction parkingTransaction = park(event);
+        addCharge(parkingTransaction);
     }
 
 }

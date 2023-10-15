@@ -25,25 +25,42 @@ public class TransactionManager {
     private HashMap<String, ArrayList<ParkingTransaction>> permitTransaction = new HashMap<>();
     private HashMap<String, ArrayList<ParkingTransaction>> customerTransaction = new HashMap<>();
     private ParkingChargeStrategyFactory factory;
+    private ParkingTransaction transaction;
 
     /**
      * This method will create a parking charge and will add it to the
      * transactions list.
      */
-    public ParkingTransaction park(Instant date, Permit permit, ParkingLot parkingLot) {
-        Money baseRate = parkingLot.getBaseRate();
+    public ParkingTransaction park(ParkingEvent event) {
+        Money charge;
+        
+        //Get values needed to create the parking transaction
+        ParkingLot lot = event.getParkingLot();
+        Permit permit = event.getPermit();
+        Instant timeIn = event.getTimeIn();
+        Instant timeOut = event.getTimeOut();
+        Money baseRate = lot.getBaseRate();
         Car car = permit.getCar();
-        factory = parkingLot.getParkingChargeStrategyFactory();
+        
+        //Get the strategy
+        factory = lot.getParkingChargeStrategyFactory();
         ParkingChargeStrategy strategy = factory.makeStrategy();
+        
+        //If no strategy, use the base rate
         if (strategy == null) {
-            throw new IllegalArgumentException("Null strategy");
+            charge = strategy.calculateParkingCharge(event, baseRate);
+        } else {
+            charge = lot.getBaseRate();
         }
 
-        Money charge = strategy.calculateParkingCharge(date, permit, baseRate);
-        ParkingTransaction transaction = new ParkingTransaction.Builder(date, permit, parkingLot, charge).build();
+        //Go based on time in if there is not time out
+        if (event.getTimeOut() == null) {
+            transaction = new ParkingTransaction.Builder(timeIn, permit, lot, charge).build();
+        } else {
+            transaction = new ParkingTransaction.Builder(timeOut, permit, lot, charge).build();
+        }
+
         transactions.add(transaction);
-        //carTransaction.put(car, transaction);
-        //permitTransaction.put(permit, transaction);
         return transaction;
     }
 
@@ -90,36 +107,4 @@ public class TransactionManager {
         return totalCharges;
     }
 
-    //extra code from ICT4305
-    /*
-    // Calculates the overnight parking charge for a given car and the number of days it was parked.
-    private Money calculateOvernightCharge(Car car, long daysInLot) {
-        double dailyRate = 30.00;
-        double discountedRate = getDiscountedRate(car, dailyRate);
-        double totalDollars = discountedRate * daysInLot;
-        return new Money(totalDollars);
-    }
-
-    // Calculates the hourly parking charge for a given car and the number of hours it was parked.
-    private Money calculateHourlyCharge(Car car, long hoursInLot) {
-        double hourlyRate = 15.00;
-        double discountedRate = getDiscountedRate(car, hourlyRate);
-        double totalDollars = discountedRate * hoursInLot;
-        return new Money(totalDollars);
-    }
-
-    // Calculates the one-time parking charge for a given car.
-    private Money calculateOneTimeCharge(Car car) {
-        double dailyRate = 32.00;
-        double discountedRate = getDiscountedRate(car, dailyRate);
-        return new Money(discountedRate);
-    }
-
-    // Calculates the discounted rate for a given rate and car type.
-    private double getDiscountedRate(Car car, double rate) {
-        CARTYPE carType = car.getCarType();
-        double discountPercentage = carType.getDiscountPercentage();
-        return rate * (1 - discountPercentage);
-    }
-     */
 }

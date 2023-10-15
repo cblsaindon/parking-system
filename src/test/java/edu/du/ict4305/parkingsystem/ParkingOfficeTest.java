@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.Instant;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -63,7 +64,7 @@ public class ParkingOfficeTest {
         String license = "ABC123";
         String phone = "555-555-5555";
 
-        Customer customer = registerTestCustomer();
+        Customer customer = testRegisterCustomerWithOffice();
 
         assertNotNull(customer);
         assertEquals(firstName, customer.getFirstName());
@@ -73,7 +74,7 @@ public class ParkingOfficeTest {
 
     @Test
     void testRegisterCar() {
-        Customer customer = registerTestCustomer();
+        Customer customer = testRegisterCustomerWithOffice();
 
         String carLicense = "ABC123";
         CarType carType = CarType.COMPACT;
@@ -86,7 +87,7 @@ public class ParkingOfficeTest {
 
     @Test
     public void testGetCustomerByName() {
-        Customer customer = registerTestCustomer();
+        Customer customer = testRegisterCustomerWithOffice();
 
         ParkingOffice instance = new ParkingOffice("Parking Office 1",
                 address,
@@ -99,7 +100,7 @@ public class ParkingOfficeTest {
 
     @Test
     void testGetCustomerByPhone() {
-        Customer customer = registerTestCustomer();
+        Customer customer = testRegisterCustomerWithOffice();
 
         Customer result = parkingOffice.getCustomerByPhone("555-555-5555");
         //assertNotNull(result);
@@ -235,12 +236,13 @@ public class ParkingOfficeTest {
     @org.junit.Test
     public void testPark() {
         System.out.println("park");
+        ParkingEvent event = new ParkingEvent(parkingLot, permit, Instant.now(), Instant.now());
         Instant date = null;
-        //Car car = null;
         String lotId = "";
         ParkingOffice instance = null;
         ParkingTransaction expResult = null;
-        ParkingTransaction result = instance.park(date, permit, parkingLot);
+        ParkingTransaction result = instance.park(event);
+
         assertEquals(expResult, result);
     }
 
@@ -257,7 +259,8 @@ public class ParkingOfficeTest {
         assertEquals(expResult, result);
     }
 
-    private Customer registerTestCustomer() {
+    @Test
+    private Customer testRegisterCustomerWithOffice() {
         String firstName = "John";
         String lastName = "Doe";
         String address1 = "123 Main St";
@@ -271,6 +274,23 @@ public class ParkingOfficeTest {
                 city, state, zipcode, phone);
 
         return customer;
+    }
+
+    @Test
+    void testAddCharge() {
+        Money charge = Money.of(5);
+        ParkingTransaction parkingTransaction = new ParkingTransaction.Builder(Instant.now(), permit, parkingLot, charge).build();
+
+        // Ensure the charges list is initially empty
+        assertEquals(0, parkingOffice.getCharges().size());
+
+        // Add a parking charge
+        parkingOffice.addCharge(parkingTransaction);
+
+        // Check if the charge was added
+        List<ParkingTransaction> charges = parkingOffice.getCharges();
+        assertEquals(1, charges.size());
+        assertTrue(charges.contains(parkingTransaction));
     }
 
 }

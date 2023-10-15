@@ -4,11 +4,13 @@
  */
 package edu.du.ict4305.parkingsystem;
 
+import edu.du.ict4315.parking.charges.factory.DiscountEventsStrategyFactory;
 import edu.du.ict4315.parking.charges.factory.ParkingChargeStrategyFactory;
 import edu.du.ict4315.parking.charges.strategy.ParkingChargeStrategy;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,27 +21,29 @@ import org.junit.jupiter.api.BeforeEach;
  */
 public class ParkingLotTest {
 
-    private Customer customer;
     private Address address;
     private Car car;
-    private ParkingLot parkingLot;
+    private ParkingLot lot;
     private ParkingChargeStrategy mockChargeStrategy;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
+    private ParkingOffice office;
+    private Permit permit;
 
     @BeforeEach
     public void setUpClass() {
-        address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
-        firstName = "Jane";
-        lastName = "Doe";
-        phoneNumber = "303-555-5555";
+        Address address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
+        String firstName = "Jane";
+        String lastName = "Doe";
+        String phoneNumber = "303-555-5555";
         Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phoneNumber).build();
         String license = "123";
         CarType type = CarType.SUV;
         car = new Car(license, type, customer);
-        parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
+        permit = new Permit("123", car);
+        lot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
         mockChargeStrategy = new MockParkingChargeStrategy();
+
+        office = new ParkingOffice("ParkingOffice", address, null, null, null);
+        lot.registerObserver(office);
     }
 
     /**
@@ -136,7 +140,7 @@ public class ParkingLotTest {
         ParkingLotType lotType = ParkingLotType.ENTRY;
         ParkingLot lot = new ParkingLot(lotId, address, capacity, lotType);
 
-        lot.entry(car);
+        lot.increaseLotCount(car);
         int expResult = 1;
         int result = lot.getCarsInLot();
         assertEquals(expResult, result);
@@ -153,14 +157,14 @@ public class ParkingLotTest {
 
         Car car = null;
 
-        assertThrows(IllegalArgumentException.class, () -> lot.entry(car));
+        assertThrows(IllegalArgumentException.class, () -> lot.increaseLotCount(car));
     }
 
     @Test
     public void testEntry_nullCar() {
         ParkingLot lot = new ParkingLot("A", address,
                 20, ParkingLotType.ENTRY);
-        assertThrows(IllegalArgumentException.class, () -> lot.entry(null));
+        assertThrows(IllegalArgumentException.class, () -> lot.increaseLotCount(null));
     }
 
     @Test
@@ -168,14 +172,14 @@ public class ParkingLotTest {
         ParkingLot lot = new ParkingLot("A", address,
                 0, ParkingLotType.ENTRY);
         //Car car = new Car("123", CarType.SUV, owner);
-        assertThrows(IllegalStateException.class, () -> lot.entry(car));
+        assertThrows(IllegalStateException.class, () -> lot.increaseLotCount(car));
     }
 
     @Test
     public void testExit_NullCar() {
         ParkingLot parkingLot = new ParkingLot("LOT1", address, 100, ParkingLotType.ENTRY);
         assertThrows(IllegalArgumentException.class, () -> {
-            parkingLot.exit(null);
+            parkingLot.decreaseLotCount(null);
         });
     }
 
@@ -186,23 +190,25 @@ public class ParkingLotTest {
 
         //Car car = new Car("license", CarType.COMPACT, owner);
         //car.setPermit("permit123");
-        assertThrows(IllegalStateException.class, () -> lot.exit(car));
+        assertThrows(IllegalStateException.class, () -> lot.decreaseLotCount(car));
     }
 
     @Test
     public void testSetParkingChargeStrategy() {
         ParkingChargeStrategyFactory mockFactory = new MockParkingChargeStrategyFactory(); // Create a mock factory
-        parkingLot.setParkingChargeStrategyFactory(mockFactory);
-        assertEquals(mockFactory, parkingLot.getParkingChargeStrategyFactory());
+        lot.setParkingChargeStrategyFactory(mockFactory);
+        assertEquals(mockFactory, lot.getParkingChargeStrategyFactory());
     }
 
     @Test
     public void testGetParkingCharge() {
         ParkingChargeStrategyFactory mockFactory = new MockParkingChargeStrategyFactory(); // Create a mock factory
-        parkingLot.setParkingChargeStrategyFactory(mockFactory);
+        lot.setParkingChargeStrategyFactory(mockFactory);
+
+        ParkingEvent event = new ParkingEvent(lot, new Permit("Sample Permit", car), Instant.now(), Instant.now());
 
         // Calculate the parking charge using the configured factory
-        Money charge = parkingLot.getParkingCharge(Instant.now(), new Permit("Sample Permit", car));
+        Money charge = lot.getParkingCharge(event);
 
         // expected charge value vs. the mock strategy
         assertEquals(Money.of(10.0).getDollars(), charge.getDollars()); // Adjust the expected value accordingly
@@ -221,13 +227,13 @@ public class ParkingLotTest {
     private class MockParkingChargeStrategy implements ParkingChargeStrategy {
 
         @Override
-        public Money calculateParkingCharge(Instant date, Permit permit, Money baseRate) {
-            return Money.of(10.0);
+        public String getStrategyName() {
+            return "Test Mock Parking Charge Strategy";
         }
 
         @Override
-        public String getStrategyName() {
-            return "Test Mock Parking Charge Strategy";
+        public Money calculateParkingCharge(ParkingEvent event, Money baseRate) {
+            return Money.of(10.0);
         }
     }
 
@@ -249,4 +255,27 @@ public class ParkingLotTest {
         assertEquals(expResult, result);
     }
 
+    @Test
+    public void testRegisterObserver() {
+        lot.registerObserver(office);
+        List<ParkingObserver> observers = lot.getObservers();
+        assertTrue(observers.contains(office));
+    }
+
+    @Test
+    public void testUnregisterObserver() {
+        lot.unregisterObserver(office);
+        List<ParkingObserver> observers = lot.getObservers();
+        assertFalse(observers.contains(office));
+    }
+
+    @Test
+    public void testNotifyObservers() {
+        ParkingEvent event = new ParkingEvent(lot, permit, Instant.now());
+        ParkingChargeStrategyFactory factory = new DiscountEventsStrategyFactory();
+        lot.setParkingChargeStrategyFactory(factory);
+        lot.notifyObservers(event);
+
+        assertTrue(office.getCharges() != null);
+    }
 }

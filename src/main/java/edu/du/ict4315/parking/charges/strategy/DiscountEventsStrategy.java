@@ -8,6 +8,7 @@ import edu.du.ict4305.parkingsystem.Car;
 import edu.du.ict4305.parkingsystem.Money;
 import edu.du.ict4305.parkingsystem.ParkingLotType;
 import edu.du.ict4305.parkingsystem.CarType;
+import edu.du.ict4305.parkingsystem.ParkingEvent;
 import edu.du.ict4305.parkingsystem.ParkingLot;
 import edu.du.ict4305.parkingsystem.Permit;
 import java.time.Instant;
@@ -33,7 +34,9 @@ public class DiscountEventsStrategy implements ParkingChargeStrategy {
     Money eventCharge = Money.of(20);
 
     @Override
-    public Money calculateParkingCharge(Instant date, Permit permit, Money baseRate) {
+    public Money calculateParkingCharge(ParkingEvent event, Money baseRate) {
+        Instant timeIn = event.getTimeIn();
+
         //set the base rate
         if (totalCharge == null) {
             totalCharge = Money.of(0);
@@ -42,17 +45,18 @@ public class DiscountEventsStrategy implements ParkingChargeStrategy {
         }
 
         //Get the discounted rate based on the car type
-        car = permit.getCar();
+        car = event.getPermit().getCar();
         double discountedRate = getDiscountedRate(car, totalCharge);
         carTypeCharge = Money.of(discountedRate);
         totalCharge = Money.add(totalCharge, carTypeCharge);
 
-        //Give rate if there is an event going on
-        if (isEvent(date)) {
+        //Give rate if there is an event going on. Use Time-in regardless of entry only vs entry/exit
+        if (isEvent(timeIn)) {
             lineItemCharge = eventCharge;
         } else {
             lineItemCharge = nonEventCharge;
         }
+
         totalCharge = Money.add(totalCharge, lineItemCharge);
 
         return totalCharge;

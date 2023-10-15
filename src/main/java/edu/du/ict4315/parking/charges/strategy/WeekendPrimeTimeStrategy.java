@@ -5,6 +5,7 @@
 package edu.du.ict4315.parking.charges.strategy;
 
 import edu.du.ict4305.parkingsystem.Money;
+import edu.du.ict4305.parkingsystem.ParkingEvent;
 import edu.du.ict4305.parkingsystem.ParkingLot;
 import edu.du.ict4305.parkingsystem.Permit;
 import java.time.DayOfWeek;
@@ -17,6 +18,7 @@ import java.time.ZonedDateTime;
  * @author candace.saindon
  */
 public class WeekendPrimeTimeStrategy implements ParkingChargeStrategy {
+
     private Money totalCharge;
     private Money lineItemCharge;
 
@@ -25,9 +27,11 @@ public class WeekendPrimeTimeStrategy implements ParkingChargeStrategy {
     private Money weekdayCharge = Money.of(10);
     private Money primeTimeCharge = Money.of(40);
     private Money dayCharge = Money.of(20);
-    
+
     @Override
-    public Money calculateParkingCharge(Instant date, Permit permit, Money baseRate) {
+    public Money calculateParkingCharge(ParkingEvent event, Money baseRate) {
+        Instant timeIn = event.getTimeIn();
+        Instant timeOut = event.getTimeOut();
         //set the base rate
         if (totalCharge == null) {
             totalCharge = Money.of(0);
@@ -36,19 +40,39 @@ public class WeekendPrimeTimeStrategy implements ParkingChargeStrategy {
         }
 
         //charge the customer more if it on the weekend
-        if (isWeekend(date)) {
-            lineItemCharge = weekendCharge;
+        //On entry/exit lots, look at both time in and time out as the cars must be only during the weekday to get the deal
+        if (timeOut != null) {
+            if (isWeekend(timeIn) && isWeekend(timeOut)) {
+                lineItemCharge = weekendCharge;
+            } else {
+                lineItemCharge = weekdayCharge;
+            }
         } else {
-            lineItemCharge = weekdayCharge;
+            if (isWeekend(timeIn)) {
+                lineItemCharge = weekendCharge;
+            } else {
+                lineItemCharge = weekdayCharge;
+            }
         }
+
         totalCharge = Money.add(totalCharge, lineItemCharge);
 
         //charge the customer more if it is prime time i.e. the evening/night
-        if (isPrimeTime(date)) {
-            lineItemCharge = primeTimeCharge;
+        //On entry/exit lots, look at both time in and time out as the cars must be only during day to get the deal
+        if (timeOut != null) {
+            if (isPrimeTime(timeIn) || isPrimeTime(timeOut)) {
+                lineItemCharge = primeTimeCharge;
+            } else {
+                lineItemCharge = dayCharge;
+            }
         } else {
-            lineItemCharge = dayCharge;
+            if (isPrimeTime(timeIn)) {
+                lineItemCharge = primeTimeCharge;
+            } else {
+                lineItemCharge = dayCharge;
+            }
         }
+
         totalCharge = Money.add(totalCharge, lineItemCharge);
 
         return totalCharge;
