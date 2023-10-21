@@ -24,7 +24,7 @@ public class ParkingOfficeTest {
     private ParkingOffice parkingOffice;
     private List<Customer> customers;
     private List<Car> cars;
-    private List<ParkingLot> lots;
+    private List<RealParkingLot> lots;
     private List<ParkingTransaction> charges;
     Address address;
     Customer customer;
@@ -32,7 +32,7 @@ public class ParkingOfficeTest {
     String license;
     Car car;
     Permit permit;
-    ParkingLot parkingLot;
+    RealParkingLot parkingLot;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -54,7 +54,7 @@ public class ParkingOfficeTest {
         type = CarType.SUV;
         car = new Car(license, type, customer);
         permit = permitManager.register(car);
-        parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
+        parkingLot = new RealParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
     }
 
     @Test
@@ -225,8 +225,8 @@ public class ParkingOfficeTest {
         System.out.println("getLotTypeByLotId");
         String lotId = "";
         ParkingOffice instance = null;
-        ParkingLot expResult = null;
-        ParkingLot result = instance.getLotTypeByLotId(lotId);
+        RealParkingLot expResult = null;
+        RealParkingLot result = instance.getLotTypeByLotId(lotId);
         assertEquals(expResult, result);
     }
 

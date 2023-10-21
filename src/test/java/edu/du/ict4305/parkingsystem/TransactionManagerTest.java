@@ -24,7 +24,7 @@ public class TransactionManagerTest {
     String license;
     Car car;
     Permit permit;
-    ParkingLot parkingLot;
+    RealParkingLot parkingLot;
     private ParkingChargeStrategy mockChargeStrategy;
     private String firstName;
     private String lastName;
@@ -42,7 +42,7 @@ public class TransactionManagerTest {
         car = new Car(license, type, customer);
         permitManager = new PermitManager();
         permit = permitManager.register(car);
-        parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
+        parkingLot = new RealParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
 
         ParkingChargeStrategyFactory mockFactory = new TransactionManagerTest.MockParkingChargeStrategyFactory(); // Create a mock factory
         parkingLot.setParkingChargeStrategyFactory(mockFactory);

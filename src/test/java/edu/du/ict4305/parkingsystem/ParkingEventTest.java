@@ -19,13 +19,13 @@ import org.junit.jupiter.api.BeforeEach;
  */
 public class ParkingEventTest {
 
-    private ParkingLot lot;
+    private RealParkingLot lot;
     private Permit permit;
 
     @BeforeEach
     public void setUpClass() {
         Address address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
-        lot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
+        lot = new RealParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
         Customer customer = new Customer.Builder("Jane", "Doe").address(address).phoneNumber("123-456-7890").build();
         Car car = new Car("123", CarType.SUV, customer);
         permit = new Permit("123", car);

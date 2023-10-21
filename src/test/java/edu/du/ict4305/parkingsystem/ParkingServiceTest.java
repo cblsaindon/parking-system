@@ -21,7 +21,7 @@ public class ParkingServiceTest {
     @BeforeEach
     public void setUp() {
         address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
-        ParkingOffice office = new ParkingOffice("Test Office", address, new ArrayList<Customer>(), new ArrayList<Car>(), new ArrayList<ParkingLot>());
+        ParkingOffice office = new ParkingOffice("Test Office", address, new ArrayList<Customer>(), new ArrayList<Car>(), new ArrayList<RealParkingLot>());
         parkingService = new ParkingService(office);
     }
 

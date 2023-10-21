@@ -11,7 +11,7 @@ import edu.du.ict4305.parkingsystem.Customer;
 import edu.du.ict4305.parkingsystem.Money;
 import edu.du.ict4305.parkingsystem.ParkingEvent;
 import edu.du.ict4305.parkingsystem.ParkingLotType;
-import edu.du.ict4305.parkingsystem.ParkingLot;
+import edu.du.ict4305.parkingsystem.RealParkingLot;
 import edu.du.ict4305.parkingsystem.Permit;
 import edu.du.ict4305.parkingsystem.PermitManager;
 import java.time.Instant;
@@ -34,7 +34,7 @@ public class DiscountEventsStrategyTest {
     //assert that the calculated charge matches your expectations.
 
     private DiscountEventsStrategy strategy;
-    private ParkingLot parkingLot;
+    private RealParkingLot parkingLot;
     private Car car;
     private Permit permit;
     private Address address;
@@ -48,7 +48,7 @@ public class DiscountEventsStrategyTest {
     public void setUp() {
         strategy = new DiscountEventsStrategy();
         address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
-        parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
+        parkingLot = new RealParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
         firstName = "Jane";
         lastName = "Doe";
         phoneNumber = "303-555-5555";

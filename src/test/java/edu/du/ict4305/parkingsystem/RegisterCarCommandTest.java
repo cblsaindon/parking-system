@@ -23,7 +23,7 @@ public class RegisterCarCommandTest {
     @Before
     public void setUp() {
         address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
-        office = new ParkingOffice("OfficeName", address, new ArrayList<Customer>(), new ArrayList<Car>(), new ArrayList<ParkingLot>());
+        office = new ParkingOffice("OfficeName", address, new ArrayList<Customer>(), new ArrayList<Car>(), new ArrayList<RealParkingLot>());
         command = new RegisterCarCommand(office);
 
     }

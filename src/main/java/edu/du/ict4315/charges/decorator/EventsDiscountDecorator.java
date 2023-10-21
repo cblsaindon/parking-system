@@ -2,30 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.du.ict4315.parking.charges.strategy;
+package edu.du.ict4315.charges.decorator;
 
 import edu.du.ict4305.parkingsystem.Car;
-import edu.du.ict4305.parkingsystem.Money;
-import edu.du.ict4305.parkingsystem.ParkingLotType;
 import edu.du.ict4305.parkingsystem.CarType;
+import edu.du.ict4305.parkingsystem.Money;
 import edu.du.ict4305.parkingsystem.ParkingEvent;
-import edu.du.ict4305.parkingsystem.RealParkingLot;
-import edu.du.ict4305.parkingsystem.Permit;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 /**
- * This Strategy implements a discount for certain car types, and also on event
- * days
  *
- * @author candace.saindon
+ * @author cblsa
  */
-public class DiscountEventsStrategy implements ParkingChargeStrategy {
+public class EventsDiscountDecorator extends ParkingChargeCalculatorDecorator {
 
-    private Car car;
-    private Money carTypeCharge;
     private Money lineItemCharge;
     private Money totalCharge;
 
@@ -33,22 +27,16 @@ public class DiscountEventsStrategy implements ParkingChargeStrategy {
     Money nonEventCharge = Money.of(10);
     Money eventCharge = Money.of(20);
 
+    public EventsDiscountDecorator(ParkingChargeCalculator component) {
+        super(component);
+    }
+
     @Override
-    public Money calculateParkingCharge(ParkingEvent event, Money baseRate) {
+    public Money getParkingCharge(ParkingEvent event) {
         Instant timeIn = event.getTimeIn();
 
-        //set the base rate
-        if (totalCharge == null) {
-            totalCharge = Money.of(0);
-        } else {
-            totalCharge = baseRate;
-        }
-
-        //Get the discounted rate based on the car type
-        car = event.getPermit().getCar();
-        double discountedRate = getDiscountedRate(car, totalCharge);
-        carTypeCharge = Money.of(discountedRate);
-        totalCharge = Money.add(totalCharge, carTypeCharge);
+        //Get the parking charge from the component
+        Money baseCharge = super.getParkingCharge(event); //call the calclator method of the wrapped calculator
 
         //Give rate if there is an event going on. Use Time-in regardless of entry only vs entry/exit
         if (isEvent(timeIn)) {
@@ -57,14 +45,9 @@ public class DiscountEventsStrategy implements ParkingChargeStrategy {
             lineItemCharge = nonEventCharge;
         }
 
-        totalCharge = Money.add(totalCharge, lineItemCharge);
+        totalCharge = Money.add(baseCharge, lineItemCharge);
 
         return totalCharge;
-    }
-
-    @Override
-    public String getStrategyName() {
-        return "Discount Events";
     }
 
     // Calculates the discounted rate for a given rate and car type.
@@ -78,7 +61,7 @@ public class DiscountEventsStrategy implements ParkingChargeStrategy {
 
     private boolean isEvent(Instant parkingDate) {
         // The is a stub for event dates. This would be stored in a database.
-        Instant instant = parkingDate.now();
+
         LocalDate[] dateArray = {
             LocalDate.of(2023, 9, 1),
             LocalDate.of(2023, 9, 10),
@@ -86,25 +69,18 @@ public class DiscountEventsStrategy implements ParkingChargeStrategy {
             LocalDate.of(2023, 9, 20),
             LocalDate.of(2023, 9, 25)
         };
-        boolean isEvent = false;
-        // Specify a time zone
-        ZoneId zoneId = ZoneId.of("America/New_York");
 
-        // Convert the Instant to a ZonedDateTime in the specified time zone
-        ZonedDateTime zonedDateTime = instant.atZone(zoneId);
-
-        // Get the day of the week from the ZonedDateTime
+        // Convert the given Instant to LocalDate in the "America/New_York" time zone
+        ZonedDateTime zonedDateTime = parkingDate.atZone(ZoneId.of("America/New_York"));
         LocalDate localDate = zonedDateTime.toLocalDate();
 
-        boolean isInArray = false;
+        boolean isEvent = false;
         for (LocalDate eventDate : dateArray) {
             if (eventDate.equals(localDate)) {
-                isInArray = true;
+                isEvent = true;
                 break; // Exit the loop once a match is found
             }
         }
         return isEvent;
     }
 }
-
-

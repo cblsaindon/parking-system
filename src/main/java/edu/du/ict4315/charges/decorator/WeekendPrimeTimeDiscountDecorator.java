@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.du.ict4315.parking.charges.strategy;
+package edu.du.ict4315.charges.decorator;
 
 import edu.du.ict4305.parkingsystem.Money;
 import edu.du.ict4305.parkingsystem.ParkingEvent;
-import edu.du.ict4305.parkingsystem.RealParkingLot;
 import edu.du.ict4305.parkingsystem.Permit;
+import edu.du.ict4305.parkingsystem.RealParkingLot;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -15,9 +15,9 @@ import java.time.ZonedDateTime;
 
 /**
  *
- * @author candace.saindon
+ * @author cblsa
  */
-public class WeekendPrimeTimeStrategy implements ParkingChargeStrategy {
+public class WeekendPrimeTimeDiscountDecorator extends ParkingChargeCalculatorDecorator {
 
     private Money totalCharge;
     private Money lineItemCharge;
@@ -28,19 +28,20 @@ public class WeekendPrimeTimeStrategy implements ParkingChargeStrategy {
     private Money primeTimeCharge = Money.of(40);
     private Money dayCharge = Money.of(20);
 
+    public WeekendPrimeTimeDiscountDecorator(ParkingChargeCalculator parkingChargeCalculator) {
+        super(parkingChargeCalculator);
+    }
+
     @Override
-    public Money calculateParkingCharge(ParkingEvent event, Money baseRate) {
+    public Money getParkingCharge(ParkingEvent event) {
         Instant timeIn = event.getTimeIn();
         Instant timeOut = event.getTimeOut();
-        //set the base rate
-        if (totalCharge == null) {
-            totalCharge = Money.of(0);
-        } else {
-            totalCharge = baseRate;
-        }
-
         //charge the customer more if it on the weekend
         //On entry/exit lots, look at both time in and time out as the cars must be only during the weekday to get the deal
+
+        //Get the parking charge from the component
+        Money baseCharge = super.getParkingCharge(event); //call the calclator method of the wrapped calculator
+
         if (timeOut != null) {
             if (isWeekend(timeIn) && isWeekend(timeOut)) {
                 lineItemCharge = weekendCharge;
@@ -55,7 +56,7 @@ public class WeekendPrimeTimeStrategy implements ParkingChargeStrategy {
             }
         }
 
-        totalCharge = Money.add(totalCharge, lineItemCharge);
+        totalCharge = Money.add(baseCharge, lineItemCharge);
 
         //charge the customer more if it is prime time i.e. the evening/night
         //On entry/exit lots, look at both time in and time out as the cars must be only during day to get the deal
@@ -114,10 +115,5 @@ public class WeekendPrimeTimeStrategy implements ParkingChargeStrategy {
         isWeekend = dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY;
 
         return isWeekend;
-    }
-
-    @Override
-    public String getStrategyName() {
-        return "Weekend Prime Time";
     }
 }

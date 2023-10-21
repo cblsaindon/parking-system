@@ -15,7 +15,7 @@ import java.time.Instant;
 public class ParkingTransactionTest {
 
     private PermitManager permitManager;
-    private ParkingLot parkingLot;
+    private RealParkingLot parkingLot;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -37,7 +37,7 @@ public class ParkingTransactionTest {
         CarType type = CarType.SUV;
         Car car = new Car(license, type, customer);
         Permit permit = permitManager.register(car);
-        parkingLot = new ParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
+        parkingLot = new RealParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
         Instant incurred = Instant.now();
         Money amount = Money.of(10.0);
 

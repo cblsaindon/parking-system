@@ -11,6 +11,8 @@ package edu.du.ict4305.parkingsystem;
  *
  * @author candace.saindon
  */
+import edu.du.ict4315.charges.decorator.ParkingChargeCalculator;
+import edu.du.ict4315.charges.decorator.ParkingChargeCalculatorFactory;
 import edu.du.ict4315.parking.charges.factory.ParkingChargeStrategyFactory;
 import edu.du.ict4315.parking.charges.strategy.ParkingChargeStrategy;
 import java.time.Duration;
@@ -28,7 +30,9 @@ public class RealParkingLot {
     private int carsInLot;
     private ParkingLotType lotType;
     private Money baseRate = Money.of(5.00);
+    private String strategy;
     private ParkingChargeStrategyFactory strategyFactory;
+    private ParkingChargeCalculatorFactory calculatorFactory;
     private List<ParkingObserver> observers = new ArrayList<>();
 
     public RealParkingLot(String lotId, Address address, int capacity, ParkingLotType lotType) {
@@ -72,6 +76,14 @@ public class RealParkingLot {
         return lotType;
     }
 
+    public ParkingChargeCalculatorFactory getParkingChargeCalculatorFactory() {
+        return calculatorFactory;
+    }
+
+    public void setParkingChargeCalculatorFactory(ParkingChargeCalculatorFactory factory) {
+        this.calculatorFactory = factory;
+    }
+
     public ParkingChargeStrategyFactory getParkingChargeStrategyFactory() {
         return strategyFactory;
     }
@@ -80,9 +92,16 @@ public class RealParkingLot {
         this.strategyFactory = factory;
     }
 
+    public void setStrategy(String strategy) {
+        this.strategy = strategy;
+    }
+
     public Money getParkingCharge(ParkingEvent event) {
-        ParkingChargeStrategy strategy = strategyFactory.makeStrategy();
-        Money charge = strategy.calculateParkingCharge(event, baseRate);
+
+        //ParkingChargeStrategy strategy = strategyFactory.makeStrategy();
+        //Money charge = strategy.calculateParkingCharge(event, baseRate);
+        ParkingChargeCalculator calc = calculatorFactory.getParkingChargeCalculator(this.strategy);
+        Money charge = calc.getParkingCharge(event);
         return charge;
     }
 

@@ -111,12 +111,34 @@ public class Money implements Comparable<Money> {
     }
 
     public static Money add(Money moneyOne, Money moneyTwo) {
+        double added = moneyOne.getDollars() + moneyTwo.getDollars();
+        return new Money(added,moneyOne.getCurrency());
+    }
 
-        return new Money(moneyOne.getCents() + moneyTwo.getCents(), moneyOne.currency);
+    public static Money subtract(Money l, Money r) {
+        long lcents = l.getCents();
+        long rcents = r.getCents();
+        
+        if (!l.currency.equals(r.currency)) {
+            throw new CurrencyConversionException("Cannot convert currencies at this time");
+        }
+        
+        Money result = new Money(lcents - rcents, l.currency);
+        
+        return result;
     }
 
     private long getCents() {
         return amount;
+    }
+
+    public static Money times(Money l, int n) {
+        return new Money(l.getCents() * n, l.getCurrency());
+    }
+
+    public static Money times(Money l, double d) {
+        long amt = (long) (l.getCents() * d);
+        return new Money(amt, l.currency);
     }
 
     @Override
