@@ -9,12 +9,13 @@ import edu.du.ict4315.parking.observers.ParkingEvent;
 import edu.du.ict4315.parking.Permit;
 import edu.du.ict4315.parking.parkinglot.RealParkingLot;
 import java.time.Instant;
+import java.io.Serializable;
 
 /**
  *
  * @author cblsa
  */
-public abstract class ParkingChargeCalculator {
+public abstract class ParkingChargeCalculator implements Serializable {
  
     public void ParkingChargeCalculator() {
         

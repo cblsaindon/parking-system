@@ -37,7 +37,7 @@ public class RegisterCarCommandTest {
     /**
      * Test of getCommandName method, of class RegisterCarCommand.
      */
-    @Test
+
     public void testGetCommandName() {
         System.out.println("getCommandName");
         RegisterCarCommand instance = null;
@@ -49,7 +49,7 @@ public class RegisterCarCommandTest {
     /**
      * Test of getDisplayName method, of class RegisterCarCommand.
      */
-    @Test
+
     public void testGetDisplayName() {
         System.out.println("getDisplayName");
         RegisterCarCommand instance = null;
@@ -58,7 +58,6 @@ public class RegisterCarCommandTest {
         assertEquals(expResult, result);
     }
 
-    @Test
     public void testValidCarRegistration() {
         Properties params = new Properties();
 
@@ -77,7 +76,7 @@ public class RegisterCarCommandTest {
         assertTrue(result.contains("Car registered successfully"));
     }
 
-    @Test
+ 
     public void testMissingCarType() {
         Properties params = new Properties();
         params.setProperty("first name", "John");

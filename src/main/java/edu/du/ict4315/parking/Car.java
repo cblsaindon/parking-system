@@ -4,6 +4,7 @@
  */
 package edu.du.ict4315.parking;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Instant;
 import java.util.Objects;
@@ -15,7 +16,7 @@ import java.util.Objects;
  *
  * @author candace.saindon
  */
-public class Car {
+public class Car implements Serializable  {
 
   private String licensePlate;
   private CarType type;

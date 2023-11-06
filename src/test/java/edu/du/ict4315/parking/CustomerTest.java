@@ -64,7 +64,7 @@ public class CustomerTest {
 
         Customer customer = new Customer.Builder(firstName, lastName).address(address).phoneNumber(phoneNumber).build();
 
-        String expResult = "edu.du.ict4305.parkingsystem.Customer" + "[firstName=" + firstName + ",lastName=" + lastName
+        String expResult = "edu.du.ict4315.parking.Customer" + "[firstName=" + firstName + ",lastName=" + lastName
                 + ",address=" + address + ",phoneNumber=" + phoneNumber + "]";
 
         String result = customer.toString();

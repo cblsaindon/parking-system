@@ -130,7 +130,7 @@ public class CarTest {
         String license = "123";
         CarType type = CarType.SUV;
 
-        String expResult = "edu.du.ict4305.parkingsystem.Car" + "[licensePlate=" + license + ",type=" + type + ",customer=" + customer + "]";
+        String expResult = "edu.du.ict4315.parking.Car" + "[licensePlate=" + license + ",type=" + type + ",customer=" + customer + "]";
         String result = car.toString();
 
         assertEquals(expResult, result);

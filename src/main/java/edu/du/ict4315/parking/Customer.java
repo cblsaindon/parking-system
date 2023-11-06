@@ -4,6 +4,8 @@
  */
 package edu.du.ict4315.parking;
 
+import java.io.Serializable;
+
 /**
  * Class: Customer The Customer class extends the Driver class and includes
  * additional attributes for customer ID, address, and phone number. It has a
@@ -13,7 +15,7 @@ package edu.du.ict4315.parking;
  *
  * @author candace.saindon
  */
-public class Customer {
+public class Customer implements Serializable {
 
     private final String firstName;
     private final String lastName;

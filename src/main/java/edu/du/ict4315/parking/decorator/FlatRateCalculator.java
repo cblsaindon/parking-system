@@ -6,12 +6,12 @@ package edu.du.ict4315.parking.decorator;
 
 import edu.du.ict4315.parking.currency.Money;
 import edu.du.ict4315.parking.observers.ParkingEvent;
-
+import java.io.Serializable;
 /**
  *
  * @author cblsa
  */
-public class FlatRateCalculator extends ParkingChargeCalculator {
+public class FlatRateCalculator extends ParkingChargeCalculator implements Serializable {
 
     @Override
     public Money getParkingCharge(ParkingEvent event) {

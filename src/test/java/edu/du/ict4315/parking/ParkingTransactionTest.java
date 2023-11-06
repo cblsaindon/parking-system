@@ -53,7 +53,7 @@ public class ParkingTransactionTest {
 
         ParkingTransaction parkingCharge = new ParkingTransaction.Builder(incurred, permit, parkingLot, amount).build();
 
-        String expResult = "edu.du.ict4305.parkingsystem.ParkingTransaction[permit=" + permit
+        String expResult = "edu.du.ict4315.parking.ParkingTransaction[permit=" + permit
                 + ", parkinglot=" + parkingLot + ",incurred=" + incurred + ", amount=" + amount + "]";
 
         String result = parkingCharge.toString();

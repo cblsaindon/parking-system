@@ -4,6 +4,7 @@
  */
 package edu.du.ict4315.parking.currency;
 
+import java.io.Serializable;
 import java.util.Currency;
 import java.util.Set;
 
@@ -13,7 +14,7 @@ import java.util.Set;
  * @author candace.saindon based on M. I. Schwartz and R. Judd class Money
  * starter class example
  */
-public class Money implements Comparable<Money> {
+public class Money implements Comparable<Money>, Serializable {
 
     private long amount;
     private final Currency currency;

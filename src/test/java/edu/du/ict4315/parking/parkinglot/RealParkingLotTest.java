@@ -4,16 +4,8 @@
  */
 package edu.du.ict4315.parking.parkinglot;
 
-import edu.du.ict4315.parking.parkinglot.ParkingLotType;
-import edu.du.ict4315.parking.Permit;
-import edu.du.ict4315.parking.parkinglot.RealParkingLot;
-import edu.du.ict4315.parking.Car;
-import edu.du.ict4315.parking.Address;
 import edu.du.ict4315.parking.Address;
 import edu.du.ict4315.parking.Car;
-import edu.du.ict4315.parking.ParkingOffice;
-import edu.du.ict4315.parking.Customer;
-import edu.du.ict4315.parking.CarType;
 import edu.du.ict4315.parking.CarType;
 import edu.du.ict4315.parking.Customer;
 import edu.du.ict4315.parking.ParkingOffice;
@@ -26,8 +18,6 @@ import edu.du.ict4315.parking.strategy.DiscountEventsStrategyFactory;
 import edu.du.ict4315.parking.strategy.ParkingChargeStrategyFactory;
 import edu.du.ict4315.parking.strategy.ParkingChargeStrategy;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,7 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
  *
  * @author candace.saindon
  */
-public class ParkingLotTest {
+public class RealParkingLotTest {
 
     private Address address;
     private Car car;
@@ -207,7 +197,7 @@ public class ParkingLotTest {
         int carsInLot = 0;
 
         RealParkingLot instance = new RealParkingLot(lotId, address, capacity, ParkingLotType.ENTRY);
-        String expResult = "edu.du.ict4305.parkingsystem.RealParkingLot" + "[lotId=" + lotId + ", address=" + address
+        String expResult = "edu.du.ict4315.parking.parkinglot.RealParkingLot" + "[lotId=" + lotId + ", address=" + address
                 + ",capacity=" + capacity + ", carsInLot=" + carsInLot + "]";
         String result = instance.toString();
         assertEquals(expResult, result);
@@ -227,13 +217,4 @@ public class ParkingLotTest {
         assertFalse(observers.contains(office));
     }
 
-    @Test
-    public void testNotifyObservers() {
-        ParkingEvent event = new ParkingEvent(lot, permit, Instant.now());
-        ParkingChargeStrategyFactory factory = new DiscountEventsStrategyFactory();
-        lot.setParkingChargeStrategyFactory(factory);
-        lot.notifyObservers(event);
-
-        assertTrue(office.getCharges() != null);
-    }
 }

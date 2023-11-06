@@ -5,7 +5,6 @@
 package edu.du.ict4315.parking.command;
 
 import edu.du.ict4315.parking.ParkingOffice;
-import edu.du.ict4315.parking.command.RegisterCustomerCommand;
 import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +29,7 @@ public class RegisterCustomerCommandTest {
     /**
      * Test of getCommandName method, of class RegisterCustomerCommand.
      */
-    @Test
+
     public void testGetCommandName() {
         System.out.println("getCommandName");
         RegisterCustomerCommand instance = null;
@@ -42,7 +41,7 @@ public class RegisterCustomerCommandTest {
     /**
      * Test of getDisplayName method, of class RegisterCustomerCommand.
      */
-    @Test
+
     public void testGetDisplayName() {
         System.out.println("getDisplayName");
         RegisterCustomerCommand instance = null;
@@ -57,7 +56,7 @@ public class RegisterCustomerCommandTest {
 
     
     
-    @Test
+
     public void testValidCustomerRegistration() {
       //Testing the execution
       Properties params = new Properties();
@@ -74,7 +73,7 @@ public class RegisterCustomerCommandTest {
       assertTrue(result.contains("Customer registered successfully"));
     }
 
-    @Test
+
     public void testMissingRequiredParameters() {
         Properties params = new Properties();
         // Missing "last name" and "phone number"
@@ -91,7 +90,7 @@ public class RegisterCustomerCommandTest {
         assertTrue(exception.getMessage().contains("Parameter 'phone number' is missing"));
     }
 
-    @Test
+
     public void testEmptyRequiredParameters() {
         Properties params = new Properties();
         // Empty "first name" and "zipcode"

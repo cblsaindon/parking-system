@@ -28,7 +28,7 @@ public class MoneyTest {
     System.out.println("toString");
     long cents = 1000;
     Money instance = Money.of(10);
-    String expResult = "edu.du.ict4305.parkingsystem.Money[cents=" + cents + "]";
+    String expResult = "edu.du.ict4315.parking.currency.Money[cents=" + cents + "]";
 
     String result = instance.toString();
     assertEquals(expResult, result);

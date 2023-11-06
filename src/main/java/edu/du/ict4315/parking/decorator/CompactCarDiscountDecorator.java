@@ -11,12 +11,13 @@ import edu.du.ict4315.parking.observers.ParkingEvent;
 import edu.du.ict4315.parking.Permit;
 import edu.du.ict4315.parking.parkinglot.RealParkingLot;
 import java.time.Instant;
+import java.io.Serializable;
 
 /**
  *
  * @author candace.saindon
  */
-public class CompactCarDiscountDecorator extends ParkingChargeCalculatorDecorator {
+public class CompactCarDiscountDecorator extends ParkingChargeCalculatorDecorator implements Serializable {
 
     //Reference to the component that this decorator wraps
     private ParkingChargeCalculator component;

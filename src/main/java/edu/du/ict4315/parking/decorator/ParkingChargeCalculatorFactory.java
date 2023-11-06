@@ -4,11 +4,13 @@
  */
 package edu.du.ict4315.parking.decorator;
 
+import java.io.Serializable;
+
 /**
  *
  * @author candace.saindon
  */
-public class ParkingChargeCalculatorFactory {
+public class ParkingChargeCalculatorFactory implements Serializable {
 
     public ParkingChargeCalculator getParkingChargeCalculator(String strategy) {
         if ("CompactCarDiscount".equalsIgnoreCase(strategy)) {

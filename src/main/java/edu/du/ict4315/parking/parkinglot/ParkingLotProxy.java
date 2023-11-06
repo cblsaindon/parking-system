@@ -12,12 +12,13 @@ import edu.du.ict4315.parking.observers.ParkingObserver;
 import edu.du.ict4315.parking.strategy.ParkingChargeStrategyFactory;
 import java.time.Instant;
 import java.util.List;
+import java.io.Serializable;
 
 /**
  *
  * @author candace.saindon
  */
-public class ParkingLotProxy implements ParkingLot {
+public class ParkingLotProxy implements ParkingLot, Serializable {
 
     private RealParkingLot realParkingLot;
     private String lotId;

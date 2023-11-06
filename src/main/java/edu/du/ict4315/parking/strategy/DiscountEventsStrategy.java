@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.io.Serializable;
 
 /**
  * This Strategy implements a discount for certain car types, and also on event
@@ -22,7 +23,7 @@ import java.time.ZonedDateTime;
  *
  * @author candace.saindon
  */
-public class DiscountEventsStrategy implements ParkingChargeStrategy {
+public class DiscountEventsStrategy implements ParkingChargeStrategy, Serializable {
 
     private Car car;
     private Money carTypeCharge;

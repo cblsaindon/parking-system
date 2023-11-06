@@ -7,12 +7,13 @@ package edu.du.ict4315.parking.observers;
 import edu.du.ict4315.parking.Permit;
 import edu.du.ict4315.parking.parkinglot.RealParkingLot;
 import java.time.Instant;
+import java.io.Serializable;
 
 /**
  *
  * @author candace.saindon
  */
-public class ParkingEvent {
+public class ParkingEvent implements Serializable {
 
     private RealParkingLot lot;
     private Instant timeIn;

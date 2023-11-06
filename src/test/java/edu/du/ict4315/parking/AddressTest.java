@@ -52,7 +52,7 @@ public class AddressTest {
         String state = "CO";
         String zipCode = "80202";
 
-        String expResult = "edu.du.ict4305.parkingsystem.Address" + "[streetAddress1=" + streetAddress1 + ", streetAddress2=" + streetAddress2
+        String expResult = "edu.du.ict4315.parking.Address" + "[streetAddress1=" + streetAddress1 + ", streetAddress2=" + streetAddress2
                 + ",city=" + city + ", zipCode=" + zipCode + ", state=" + state + "]";
         String result = address.toString();
 

@@ -19,15 +19,13 @@ import edu.du.ict4315.parking.observers.ParkingObserver;
 import edu.du.ict4315.parking.decorator.ParkingChargeCalculator;
 import edu.du.ict4315.parking.decorator.ParkingChargeCalculatorFactory;
 import edu.du.ict4315.parking.strategy.ParkingChargeStrategyFactory;
-import edu.du.ict4315.parking.strategy.ParkingChargeStrategy;
-import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.io.Serializable;
 
-public class RealParkingLot {
+public class RealParkingLot implements Serializable {
 
     private String lotId;
     private Address address;

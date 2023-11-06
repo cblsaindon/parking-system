@@ -8,6 +8,7 @@ import edu.du.ict4315.parking.parkinglot.RealParkingLot;
 import edu.du.ict4315.parking.currency.Money;
 import edu.du.ict4315.parking.observers.ParkingEvent;
 import edu.du.ict4315.parking.observers.ParkingObserver;
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.Set;
  *
  * @author candace.saindon
  */
-public class ParkingOffice implements ParkingObserver {
+public class ParkingOffice implements ParkingObserver, Serializable {
 
     private String name; // name of the Parking Office
     private Address address; // address of the Parking Office
@@ -36,6 +37,24 @@ public class ParkingOffice implements ParkingObserver {
     private Map<String, Customer> customerToPhoneMap; // map of customers keyed by their phone number
     private Map<String, RealParkingLot> parkingLotToType; // map of parking lots keyed by their lot types
     private Map<Customer, String> permitToCustomerMap; // map of customers keyed by their phone number
+    
+
+    public ParkingOffice() {
+        this.name = null;
+        this.address = null;
+        this.cars = new ArrayList<>(); // Initialize the cars list
+        this.lots = new ArrayList<>();
+
+        customerToIdMap = new HashMap<>();
+        customerToPhoneMap = new HashMap<>();
+        permitToCustomerMap = new HashMap<>();
+        parkingLotToType = new HashMap<>();
+        charges = new ArrayList<>();
+
+        // Initialize TransactionManager and PermitManager
+        this.transactionManager = new TransactionManager();
+        this.permitManager = new PermitManager();
+    }
 
     public ParkingOffice(String name, Address address, List<Customer> customers,
             List<Car> cars, List<RealParkingLot> lots) {
@@ -47,6 +66,7 @@ public class ParkingOffice implements ParkingObserver {
         customerToIdMap = new HashMap<>();
         customerToPhoneMap = new HashMap<>();
         permitToCustomerMap = new HashMap<>();
+        parkingLotToType = new HashMap<>();
         charges = new ArrayList<>();
 
         // Initialize TransactionManager and PermitManager
@@ -72,27 +92,39 @@ public class ParkingOffice implements ParkingObserver {
         return customer;
     }
 
+    public String register(Customer customer) {
+        String customerId = customer.getId();
+        try {
+            customerToIdMap.put(customerId, customer);
+            customerToPhoneMap.put(customer.getPhone(), customer);
+
+        } catch (Exception e) {
+            System.err.println("Error registering customer: " + e.getMessage());
+            return null;
+        }
+        return customerId;
+    }
+
     // Method to register a car with the Parking Office.
-    public Car register(Customer customer, String license, CarType carType) {
+    public String register(Customer customer, String license, CarType carType) {
 
         Car car = new Car(license, carType, customer);
 
         Permit permit = permitManager.register(car);
         String permitId = permit.getId();
 
-        permitToCustomerMap.put(customer, permitId);
         cars.add(car);
 
-        return car;
+        return permitId;
     }
 
     //Register parking lot and use register observer
-    public void addParkingLot(RealParkingLot parkingLot) throws Exception {
+    public void addParkingLot(RealParkingLot parkingLot) {
         if (!lots.contains(parkingLot)) {
             parkingLot.registerObserver(this);
             lots.add(parkingLot);
         } else {
-            throw new Exception("Parking lot already added");
+            throw new IllegalArgumentException("Parking lot already added");
         }
     }
 
@@ -105,10 +137,18 @@ public class ParkingOffice implements ParkingObserver {
         return name;
     }
 
+    public void setParkingOfficeName(String name) {
+        this.name = name;
+    }
+
+    public void setParkingOfficeAddress(Address address) {
+        this.address = address;
+    }
+
     public List<ParkingTransaction> getCharges() {
         return charges;
     }
-    
+
     public void addCharge(ParkingTransaction charge) {
         charges.add(charge);
     }
@@ -156,6 +196,14 @@ public class ParkingOffice implements ParkingObserver {
             if (firstName.equals(c.getFirstName()) && lastName.equals(c.getLastName())) {
                 return c;
             }
+        }
+        return null;
+    }
+
+    // Retrieves a customer from the list of customers based on the customer's first and last name.
+    public Customer getCustomerById(String customerId) {
+        for (Map.Entry<String, Customer> entry : customerToIdMap.entrySet()) {
+            Customer c = entry.getValue();
         }
         return null;
     }

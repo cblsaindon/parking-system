@@ -12,12 +12,13 @@ import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.io.Serializable;
 
 /**
  *
  * @author candace.saindon
  */
-public class WeekendPrimeTimeStrategy implements ParkingChargeStrategy {
+public class WeekendPrimeTimeStrategy implements ParkingChargeStrategy, Serializable {
 
     private Money totalCharge;
     private Money lineItemCharge;

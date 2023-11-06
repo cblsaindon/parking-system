@@ -6,6 +6,7 @@ package edu.du.ict4315.parking;
 
 import edu.du.ict4315.parking.parkinglot.RealParkingLot;
 import edu.du.ict4315.parking.currency.Money;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -14,7 +15,7 @@ import java.util.Objects;
  *
  * @author candace.saindon
  */
-public class ParkingTransaction {
+public class ParkingTransaction implements Serializable {
 
     private final Permit permit;
     private final RealParkingLot parkingLot;

@@ -13,10 +13,12 @@ package edu.du.ict4315.parking;
  *
  * @author candace.saindon
  */
+
 import java.lang.String;
 import java.util.regex.Pattern;
+import java.io.Serializable;
 
-public class Address {
+public class Address implements Serializable {
 
     private final String streetAddress1;
     private final String streetAddress2;

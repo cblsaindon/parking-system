@@ -69,7 +69,7 @@ public class PermitTest {
     @Test
     public void testToString() {
         Permit permit = new Permit("P123", car, expiration);
-        String expectedToString = "edu.du.ict4305.parkingsystem.Permit[id=P123, permitExpiration=" + expiration + "]";
+        String expectedToString = "edu.du.ict4315.parking.Permit[id=P123, permitExpiration=" + expiration + "]";
         assertEquals(expectedToString, permit.toString());
     }
 

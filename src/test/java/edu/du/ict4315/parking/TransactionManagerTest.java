@@ -4,16 +4,8 @@
  */
 package edu.du.ict4315.parking;
 
-import edu.du.ict4315.parking.TransactionManager;
-import edu.du.ict4315.parking.ParkingTransaction;
 import edu.du.ict4315.parking.parkinglot.ParkingLotType;
-import edu.du.ict4315.parking.Permit;
-import edu.du.ict4315.parking.PermitManager;
 import edu.du.ict4315.parking.parkinglot.RealParkingLot;
-import edu.du.ict4315.parking.Car;
-import edu.du.ict4315.parking.Address;
-import edu.du.ict4315.parking.Customer;
-import edu.du.ict4315.parking.CarType;
 import edu.du.ict4315.parking.currency.Money;
 import edu.du.ict4315.parking.observers.ParkingEvent;
 import edu.du.ict4315.parking.decorator.ParkingChargeCalculatorFactory;

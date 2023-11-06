@@ -12,11 +12,12 @@ package edu.du.ict4315.parking;
 import edu.du.ict4315.parking.command.RegisterCarCommand;
 import edu.du.ict4315.parking.command.Command;
 import edu.du.ict4315.parking.command.RegisterCustomerCommand;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Properties;
 
-public class ParkingService implements Service {
+public class ParkingService implements Service, Serializable {
     
     private ParkingOffice office;
     private Map<String,Command> commands;

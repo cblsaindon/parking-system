@@ -13,12 +13,13 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.io.Serializable;
 
 /**
  *
- * @author cblsa
+ * @author candace.saindon
  */
-public class EventsDiscountDecorator extends ParkingChargeCalculatorDecorator {
+public class EventsDiscountDecorator extends ParkingChargeCalculatorDecorator implements Serializable {
 
     private Money lineItemCharge;
     private Money totalCharge;

@@ -90,11 +90,9 @@ public class ParkingOfficeTest {
 
         String carLicense = "ABC123";
         CarType carType = CarType.COMPACT;
-        Car car = parkingOffice.register(customer, carLicense, carType);
+        String permitId = parkingOffice.register(customer, carLicense, carType);
 
-        assertNotNull(car);
-        assertEquals(carLicense, car.getLicensePlate());
-        assertEquals(carType, car.getCarType());
+        assertNotNull(permitId);
     }
 
     @Test
@@ -164,7 +162,7 @@ public class ParkingOfficeTest {
         CarType carType = null;
         ParkingOffice instance = null;
         Car expResult = null;
-        Car result = instance.register(customer, license, carType);
+        String result = instance.register(customer, license, carType);
         assertEquals(expResult, result);
     }
 

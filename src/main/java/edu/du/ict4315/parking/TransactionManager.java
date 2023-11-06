@@ -7,10 +7,8 @@ package edu.du.ict4315.parking;
 import edu.du.ict4315.parking.parkinglot.RealParkingLot;
 import edu.du.ict4315.parking.currency.Money;
 import edu.du.ict4315.parking.observers.ParkingEvent;
-import edu.du.ict4315.parking.decorator.ParkingChargeCalculator;
 import edu.du.ict4315.parking.decorator.ParkingChargeCalculatorFactory;
-import edu.du.ict4315.parking.strategy.ParkingChargeStrategyFactory;
-import edu.du.ict4315.parking.strategy.ParkingChargeStrategy;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +21,7 @@ import java.util.HashMap;
  * This is the class that manages all the parking transactions. using the
  * manager design pattern
  */
-public class TransactionManager {
+public class TransactionManager implements Serializable {
 
     private ArrayList<ParkingTransaction> transactions = new ArrayList<>();
     private HashMap<String, ArrayList<ParkingTransaction>> carTransaction = new HashMap<>();

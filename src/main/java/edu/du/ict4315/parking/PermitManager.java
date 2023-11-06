@@ -4,6 +4,7 @@
  */
 package edu.du.ict4315.parking;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * This is the manager class which manages all the parking permits.
  */
-public class PermitManager {
+public class PermitManager implements Serializable {
   
   private List<Permit> permits =  new ArrayList<Permit>();
   /**

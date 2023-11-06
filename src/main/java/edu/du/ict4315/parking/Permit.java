@@ -4,6 +4,7 @@
  */
 package edu.du.ict4315.parking;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
  *
  * @author candace.saindon
  */
-public class Permit {
+public class Permit implements Serializable {
 
     private String id;
     private Car car;
