@@ -11,6 +11,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class ParkingService {
 
@@ -20,7 +23,7 @@ public class ParkingService {
         this.parkingOffice = parkingOffice;
     }
 
-    protected ParkingResponse handleInput(InputStream in) throws Exception {
+    public ParkingResponse handleInput(InputStream in) throws Exception {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             StringBuilder jsonInput = new StringBuilder();
@@ -96,6 +99,9 @@ public class ParkingService {
                 break;
             case "CHARGES":
                 matched = "charges";
+                break;
+            case "STOP":
+                Server.stopServer();
                 break;
             default:
                 matched = "unknown";

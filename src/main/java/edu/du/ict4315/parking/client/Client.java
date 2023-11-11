@@ -2,6 +2,8 @@ package edu.du.ict4315.parking.client;
 
 import edu.du.ict4315.parking.serialization.ParkingRequest;
 import edu.du.ict4315.parking.serialization.ParkingResponse;
+import edu.du.ict4315.parking.server.ParkingService;
+import edu.du.ict4315.parking.server.Server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
@@ -12,6 +14,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Client {
 
@@ -20,7 +24,8 @@ public class Client {
         {"Register Vehicle", "CAR", "License Plate", "Car Type", "Customer"},
         {"Start Parking", "PARK", "Permit Id", "Time"},
         {"Finish Parking", "PARK", "Permit Id", "Time"},
-        {"Get Charges", "CHARGES", "Customer", "Car"},};
+        {"Get Charges", "CHARGES", "Customer", "Car"},
+        {"Stop", "STOP"}};
 
     private static final int PORT = 7777;
     private static final String SERVER = "localhost";
@@ -74,6 +79,7 @@ public class Client {
      */
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
+        ParkingResponse serverResponse = new ParkingResponse(false, 0, "");
 
         while (true) {
             // Prompt the user for input and send it to the server
@@ -115,10 +121,14 @@ public class Client {
             ParkingRequest parkingRequest = new ParkingRequest(userInput, values);
 
             // Send the ParkingRequest and receive a response
-            ParkingResponse serverResponse = runCommand(userInput, parkingRequest);
+            serverResponse = runCommand(userInput, parkingRequest);
 
-            // Display the server's response
-            System.out.println("Server Response: " + serverResponse.getMessage());
+            if (serverResponse == null) {
+                System.out.println("Server Response: Not connected to the server");
+            } else {
+                System.out.println("Server Response: " + serverResponse.getMessage());
+            }
+
         }
     }
 
