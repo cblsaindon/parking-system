@@ -14,9 +14,6 @@ import edu.du.ict4315.parking.currency.Money;
 import edu.du.ict4315.parking.observers.ParkingEvent;
 import edu.du.ict4315.parking.observers.ParkingObserver;
 import edu.du.ict4315.parking.decorator.ParkingChargeCalculatorFactory;
-import edu.du.ict4315.parking.strategy.DiscountEventsStrategyFactory;
-import edu.du.ict4315.parking.strategy.ParkingChargeStrategyFactory;
-import edu.du.ict4315.parking.strategy.ParkingChargeStrategy;
 import java.time.Instant;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -32,7 +29,6 @@ public class RealParkingLotTest {
     private Address address;
     private Car car;
     private RealParkingLot lot;
-    private ParkingChargeStrategy mockChargeStrategy;
     private ParkingOffice office;
     private Permit permit;
 
@@ -48,7 +44,6 @@ public class RealParkingLotTest {
         car = new Car(license, type, customer);
         permit = new Permit("123", car);
         lot = new RealParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
-        mockChargeStrategy = new MockParkingChargeStrategy();
 
         office = new ParkingOffice("ParkingOffice", address, null, null, null);
         lot.registerObserver(office);
@@ -140,13 +135,6 @@ public class RealParkingLotTest {
 
     }
 
-  
-    @Test
-    public void testSetParkingChargeStrategy() {
-        ParkingChargeStrategyFactory mockFactory = new MockParkingChargeStrategyFactory(); // Create a mock factory
-        lot.setParkingChargeStrategyFactory(mockFactory);
-        assertEquals(mockFactory, lot.getParkingChargeStrategyFactory());
-    }
 
     @Test
     public void testGetParkingCharge() {
@@ -160,29 +148,6 @@ public class RealParkingLotTest {
 
         // expected charge value vs. the mock strategy
         assertEquals(Money.of(15.0).getDollars(), charge.getDollars()); // Adjust the expected value accordingly
-    }
-
-// Mock ParkingChargeStrategyFactory for testing
-    private class MockParkingChargeStrategyFactory implements ParkingChargeStrategyFactory {
-
-        @Override
-        public ParkingChargeStrategy makeStrategy() {
-            return new MockParkingChargeStrategy(); // Return a mock strategy
-        }
-    }
-
-// Mock ParkingChargeStrategy for testing
-    private class MockParkingChargeStrategy implements ParkingChargeStrategy {
-
-        @Override
-        public String getStrategyName() {
-            return "Test Mock Parking Charge Strategy";
-        }
-
-        @Override
-        public Money calculateParkingCharge(ParkingEvent event, Money baseRate) {
-            return Money.of(10.0);
-        }
     }
 
     /**

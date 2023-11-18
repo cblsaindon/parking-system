@@ -9,8 +9,6 @@ import edu.du.ict4315.parking.parkinglot.RealParkingLot;
 import edu.du.ict4315.parking.currency.Money;
 import edu.du.ict4315.parking.observers.ParkingEvent;
 import edu.du.ict4315.parking.decorator.ParkingChargeCalculatorFactory;
-import edu.du.ict4315.parking.strategy.ParkingChargeStrategyFactory;
-import edu.du.ict4315.parking.strategy.ParkingChargeStrategy;
 import java.time.Instant;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +28,6 @@ public class TransactionManagerTest {
     Car car;
     Permit permit;
     RealParkingLot parkingLot;
-    private ParkingChargeStrategy mockChargeStrategy;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -48,9 +45,6 @@ public class TransactionManagerTest {
         permitManager = new PermitManager();
         permit = permitManager.register(car);
         parkingLot = new RealParkingLot("Sample Lot", address, 100, ParkingLotType.ENTRY);
-
-        ParkingChargeStrategyFactory mockFactory = new TransactionManagerTest.MockParkingChargeStrategyFactory(); // Create a mock factory
-        parkingLot.setParkingChargeStrategyFactory(mockFactory);
 
     }
 
@@ -96,28 +90,6 @@ public class TransactionManagerTest {
         assertNotNull(result);
     }
 
-    // Mock ParkingChargeStrategyFactory for testing
-    //This class uses the MockParkingChargeStrategy class to calculate the parking charge
-    private class MockParkingChargeStrategyFactory implements ParkingChargeStrategyFactory {
 
-        @Override
-        public ParkingChargeStrategy makeStrategy() {
-            return new TransactionManagerTest.MockParkingChargeStrategy(); // Return a mock strategy
-        }
-    }
-
-    // Mock ParkingChargeStrategy for testing
-    private class MockParkingChargeStrategy implements ParkingChargeStrategy {
-
-        @Override
-        public Money calculateParkingCharge(ParkingEvent event, Money baseRate) {
-            return Money.of(10.0);
-        }
-
-        @Override
-        public String getStrategyName() {
-            return "Test Mock Parking Charge Strategy";
-        }
-    }
 
 }

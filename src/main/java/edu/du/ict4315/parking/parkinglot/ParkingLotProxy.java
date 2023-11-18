@@ -9,7 +9,6 @@ import edu.du.ict4315.parking.Permit;
 import edu.du.ict4315.parking.currency.Money;
 import edu.du.ict4315.parking.observers.ParkingEvent;
 import edu.du.ict4315.parking.observers.ParkingObserver;
-import edu.du.ict4315.parking.strategy.ParkingChargeStrategyFactory;
 import java.time.Instant;
 import java.util.List;
 import java.io.Serializable;
@@ -68,16 +67,6 @@ public class ParkingLotProxy implements ParkingLot, Serializable {
     @Override
     public ParkingLotType getLotType() {
         return realParkingLot.getLotType();
-    }
-
-    @Override
-    public ParkingChargeStrategyFactory getParkingChargeStrategyFactory() {
-        return realParkingLot.getParkingChargeStrategyFactory();
-    }
-
-    @Override
-    public void setParkingChargeStrategyFactory(ParkingChargeStrategyFactory factory) {
-        realParkingLot.setParkingChargeStrategyFactory(factory);
     }
 
     @Override

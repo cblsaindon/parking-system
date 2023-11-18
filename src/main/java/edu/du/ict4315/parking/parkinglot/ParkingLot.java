@@ -13,7 +13,6 @@ import edu.du.ict4315.parking.Permit;
 import edu.du.ict4315.parking.currency.Money;
 import edu.du.ict4315.parking.observers.ParkingEvent;
 import edu.du.ict4315.parking.observers.ParkingObserver;
-import edu.du.ict4315.parking.strategy.ParkingChargeStrategyFactory;
 import java.time.Instant;
 import java.util.List;
 
@@ -32,10 +31,6 @@ public interface ParkingLot {
     int getEmptySlots();
 
     ParkingLotType getLotType();
-
-    ParkingChargeStrategyFactory getParkingChargeStrategyFactory();
-
-    void setParkingChargeStrategyFactory(ParkingChargeStrategyFactory factory);
 
     Money getParkingCharge(ParkingEvent event);
 

@@ -2,7 +2,7 @@ package edu.du.ict4315.parking.client;
 
 import edu.du.ict4315.parking.serialization.ParkingRequest;
 import edu.du.ict4315.parking.serialization.ParkingResponse;
-import edu.du.ict4315.parking.server.ParkingService;
+import edu.du.ict4315.parking.server.RealParkingService;
 import edu.du.ict4315.parking.server.Server;
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -1,10 +1,12 @@
 package edu.du.ict4315.parking.server;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import edu.du.ict4315.parking.Address;
 import edu.du.ict4315.parking.Car;
 import edu.du.ict4315.parking.Customer;
 import edu.du.ict4315.parking.ParkingOffice;
-import edu.du.ict4315.parking.client.HandleClient;
+import edu.du.ict4315.parking.di.ParkingModule;
 import edu.du.ict4315.parking.parkinglot.RealParkingLot;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -82,13 +84,18 @@ public class Server {
      * Run this as: $ java {package name}
      */
     public static void main(String[] args) throws Exception {
+        // Create a Guice injector with your ParkingModule
+        Injector injector = Guice.createInjector(new ParkingModule());
 
+        // Use the injector to get the ParkingService
+        ParkingService service = injector.getInstance(ParkingService.class);
+        
         List<Customer> customers = new ArrayList<>();
         List<Car> cars = new ArrayList<>();
         List<RealParkingLot> lots = new ArrayList<>();
         Address address = new Address.Builder("1 Main St", "Denver", "CO", "80202").build();
         ParkingOffice parkingOffice = new ParkingOffice("Office", address, customers, cars, lots);
-        ParkingService service = new ParkingService(parkingOffice);
+        service = new RealParkingService(parkingOffice);
 
         new Server(service).startServer();
     }

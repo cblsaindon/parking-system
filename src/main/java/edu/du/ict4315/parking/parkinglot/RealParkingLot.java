@@ -18,7 +18,6 @@ import edu.du.ict4315.parking.observers.ParkingEvent;
 import edu.du.ict4315.parking.observers.ParkingObserver;
 import edu.du.ict4315.parking.decorator.ParkingChargeCalculator;
 import edu.du.ict4315.parking.decorator.ParkingChargeCalculatorFactory;
-import edu.du.ict4315.parking.strategy.ParkingChargeStrategyFactory;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,6 @@ public class RealParkingLot implements Serializable {
     private ParkingLotType lotType;
     private Money baseRate = Money.of(5.00);
     private String strategy;
-    private ParkingChargeStrategyFactory strategyFactory;
     private ParkingChargeCalculatorFactory calculatorFactory;
     private List<ParkingObserver> observers = new ArrayList<>();
 
@@ -85,14 +83,6 @@ public class RealParkingLot implements Serializable {
 
     public void setParkingChargeCalculatorFactory(ParkingChargeCalculatorFactory factory) {
         this.calculatorFactory = factory;
-    }
-
-    public ParkingChargeStrategyFactory getParkingChargeStrategyFactory() {
-        return strategyFactory;
-    }
-
-    public void setParkingChargeStrategyFactory(ParkingChargeStrategyFactory factory) {
-        this.strategyFactory = factory;
     }
 
     public void setStrategy(String strategy) {
